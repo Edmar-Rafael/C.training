@@ -21,6 +21,7 @@ int linearSearch(int arr[], int length, int target) {
       return i;
     }
   }
+  
   return -1;
 }
 

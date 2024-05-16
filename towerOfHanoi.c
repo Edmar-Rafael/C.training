@@ -3,7 +3,7 @@
 void towerOfHanoi(int n, char source[], char auxiliary[], char target[]);
 
 int main() {
-  int numDisks = 4;
+  int numDisks = 5;
   char source[] = "A";
   char auxiliary[] = "B";
   char target[] = "C";
