@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    "inttypes.h": "c"
+  },
+  "C_Cpp.errorSquiggles": "enabled"
+}

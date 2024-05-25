@@ -4,11 +4,11 @@ void towerOfHanoi(int n, char source[], char auxiliary[], char target[]);
 
 int main() {
   int numDisks = 5;
-  char source[] = "A";
+  /* char source[] = "A";
   char auxiliary[] = "B";
-  char target[] = "C";
+  char target[] = "C"; */
 
-  towerOfHanoi(numDisks, source, auxiliary, target);
+  towerOfHanoi(numDisks, "A", "B", "C");
 
   return 0;
 }
