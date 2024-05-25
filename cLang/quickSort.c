@@ -1,7 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <inttypes.h>
 
 void quickSort(int arr[], int left, int right);
 int partition(int arr[], int left, int right);
