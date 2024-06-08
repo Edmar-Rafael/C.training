@@ -8,6 +8,40 @@ typedef struct Node {
   struct Node *right;
 } Node;
 
+Node *insert(Node *root, int data);
+void inorderTraversal(struct Node *root);
+Node *search(Node *root, int data);
+
+int main() {
+  int i, arr[15], el = 59;
+  int length = sizeof(arr) / sizeof(arr[0]);
+  Node *root = NULL;
+
+  for(i = 0; i < length; i++) {
+    arr[i] = rand() % 100;
+  }
+
+  printf("Inserted: ");
+  for(i = 0; i < length; i++) {
+    root = insert(root, arr[i]);
+    printf("%d, ", arr[i]);
+  }
+
+  printf("\nInorder traversal: ");
+  inorderTraversal(root);
+  printf("\n");
+
+  Node *temp = search(root, el);
+
+  if(temp) {
+    printf("\n{%d} found.\n", temp->data);
+  } else {
+    printf("\n{x} (%d) not found.\n", el);
+  }
+
+  return 0;
+}
+
 Node *insert(Node *root, int data) {
   Node *temp = (Node*) malloc(sizeof(Node));
 
@@ -67,31 +101,5 @@ Node *search(Node *root, int data) {
     } else {
       return current;
     }
-  }
-}
-
-int main() {
-  int i;
-  int array[15] = {34, 84, 15, 0, 2, 99, 79, 9, 88, 89, 18, 31, 39, 100, 101};
-  int length = sizeof(array) / sizeof(array[0]);
-  Node *root = NULL;
-
-  for(i = 0; i < length; i++) {
-    root = insert(root, array[i]);
-    printf("Inserted: %d,", array[i]);
-  }
-
-  printf("\nInorder traversal: ");
-  inorderTraversal(root);
-  printf("\n");
-
-  Node *temp = search(root, 88);
-
-  if(temp) {
-    printf("[%d] found. \n", temp->data);
-  } else {
-    printf("[x] (%d) Not found. \n", i);
-  }
-
-  return 0;
+  } 
 }
