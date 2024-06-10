@@ -1,23 +1,27 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 void quickSort(int arr[], int left, int right);
 int partition(int arr[], int left, int right);
 void swap(int *left, int *right);
 
 int main() {
-  int el = 15;
-  int arr[] = {83, 86, 77, 15, 93, 35, 86, 92, 49, 21, 62, 27, 90, 59}, i;
+  int i, arr[15];
   int length = sizeof(arr) / sizeof(arr[0]);
 
-  for(i = 0; i < length; i++) {;
+  srand(time(NULL));
+
+  for(i = 0; i < length; i++) {
+    arr[i] = rand() % 100;
     printf("%d, ", arr[i]);
   }
-  printf("\n");
 
   quickSort(arr, 0, length - 1);
 
-  for(int j = 0; j < length; j++) {
-    printf("%d, ", arr[j]);
+  printf("\nOrdened: ");
+  for(i = 0; i < length; i++) {
+    printf("%d, ", arr[i]);
   }
   printf("\n");
 
@@ -35,7 +39,15 @@ void quickSort(int arr[], int left, int right) {
 }
 
 int partition(int arr[], int left, int right) {
-  int pivot = (arr[left] + arr[right] + arr[(left + right) / 2]) / 3;
+  srand(time(NULL));
+
+  int pivotValue = left + (rand() % (right - left));
+
+  if(pivotValue != right) {
+    swap(&arr[pivotValue], &arr[right]);
+  }
+  
+  int pivot = arr[right];
 
   while(left < right) {
     while(left < right && arr[left] <= pivot) {
@@ -48,6 +60,19 @@ int partition(int arr[], int left, int right) {
 
     swap(&arr[left], &arr[right]);
   }
+  
+  // Another option  //
+  /* int i = left;
+
+  for(int j = left; j < right; j++) {
+    if(arr[j] <= pivot) {
+      swap(&arr[i], &arr[j]);
+      i++;
+    }
+  }
+
+  swap(&arr[i], &arr[right]); */
+
   return right;
 }
 
