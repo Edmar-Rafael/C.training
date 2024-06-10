@@ -71,7 +71,9 @@ int partition(int arr[], int left, int right) {
     }
   }
 
-  swap(&arr[i], &arr[right]); */
+  swap(&arr[i], &arr[right]); 
+  
+  return i*/
 
   return right;
 }
