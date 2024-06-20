@@ -316,49 +316,52 @@ void delete_case2(rbtree t, node n) {
 }
 
 void delete_case3(rbtree t, node n) {
-  if(node_color(n->parent) == BLACK &&
-     node_color(sibling(n)) == BLACK &&
-     node_color(sibling(n)->left) == BLACK &&
-     node_color(sibling(n)->right) == BLACK
+  if(
+      node_color(n->parent) == BLACK &&
+      node_color(sibling(n)) == BLACK &&
+      node_color(sibling(n)->left) == BLACK &&
+      node_color(sibling(n)->right) == BLACK
     ) {
-      sibling(n)->color = RED;
-      delete_case1(t, n->parent);
-    } else {
-      delete_case4(t, n);
-    }
+    sibling(n)->color = RED;
+    delete_case1(t, n->parent);
+  } else {
+    delete_case4(t, n);
+  }
 }
 
 void delete_case4(rbtree t, node n) {
-  if(node_color(n->parent) == RED &&
-     node_color(sibling(n)) == BLACK &&
-     node_color(sibling(n)->left) == BLACK &&
-     node_color(sibling(n)->right)  == BLACK
+  if(
+      node_color(n->parent) == RED &&
+      node_color(sibling(n)) == BLACK &&
+      node_color(sibling(n)->left) == BLACK &&
+      node_color(sibling(n)->right)  == BLACK
     ) {
-      sibling(n)->color = RED;
-      n->parent->color = BLACK;
-    } else {
-      delete_case5(t, n);
-    }
+    sibling(n)->color = RED;
+    n->parent->color = BLACK;
+  } else {
+    delete_case5(t, n);
+  }
 }
 
 void delete_case5(rbtree t, node n) {
-  if(n == n->parent->left &&
-     node_color(sibling(n)) == BLACK &&
-     node_color(sibling(n)->left) == RED &&
-     node_color(sibling(n)->right) == BLACK
+  if(
+      n == n->parent->left &&
+      node_color(sibling(n)) == BLACK &&
+      node_color(sibling(n)->left) == RED &&
+      node_color(sibling(n)->right) == BLACK
     ) {
-      sibling(n)->color = RED;
-      sibling(n)->left->color = BLACK;
-      rotate_right(t, sibling(n));
-    } else if(
-        n == n->parent->right &&
-        node_color(sibling(n)) == BLACK &&
-        node_color(sibling(n)->left) == BLACK &&
-        node_color(sibling(n)->right) == RED
-      ) {
-         sibling(n)->color = RED;
-         sibling(n)->right->color = BLACK;
-         rotate_left(t, sibling(n));     
+    sibling(n)->color = RED;
+    sibling(n)->left->color = BLACK;
+    rotate_right(t, sibling(n));
+  } else if(
+      n == n->parent->right &&
+      node_color(sibling(n)) == BLACK &&
+      node_color(sibling(n)->left) == BLACK &&
+      node_color(sibling(n)->right) == RED
+    ) {
+    sibling(n)->color = RED;
+    sibling(n)->right->color = BLACK;
+    rotate_left(t, sibling(n));     
   }
   delete_case6(t, n);  
 }

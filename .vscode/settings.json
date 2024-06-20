@@ -1,6 +1,8 @@
 {
   "files.associations": {
-    "inttypes.h": "c"
+    "inttypes.h": "c",
+    "assert.h": "c",
+    "MINESWEEPER.C": "cpp"
   },
   "C_Cpp.errorSquiggles": "enabled"
 }
