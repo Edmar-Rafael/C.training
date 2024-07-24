@@ -5,7 +5,7 @@
 #define Class struct
 
 Class Person {
-  char name[15];
+  char name[25];
   uint8_t age;
   uint8_t height;
   void(*show)(Class Person *);
@@ -28,7 +28,7 @@ Class Person *newPerson(char name[], uint8_t age, uint8_t height) {
 
 
 int main() {
-  Class Person *person2 = (Class Person *) newPerson("Edmar Rafael", 40, 171);
+  Class Person *person2 = (Class Person *) newPerson("Edmar Rafael Henches", 40, 171);
 
   person2->show(person2);
 

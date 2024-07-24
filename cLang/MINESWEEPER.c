@@ -8,15 +8,15 @@ typedef struct Cell {
   int neighbors;
 } Cell;
 
-Cell field[10][10];
+Cell tile[10][10];
 int row, col, length = 10;
 
 void initializing() {
   for(row = 0; row < length; row++) {
     for(col = 0; col < length; col++) {
-      field[row][col].isBomb = 0;
-      field[row][col].isOpen = 0;
-      field[row][col].neighbors = 0;
+      tile[row][col].isBomb = 0;
+      tile[row][col].isOpen = 0;
+      tile[row][col].neighbors = 0;
     }
   }
 }
@@ -27,7 +27,7 @@ void drawBombs(int n) {
   for(int i = 0; i <= n; i++) {
     row = rand() % length;
     col = rand() % length;
-    field[row][col].isBomb = 1;
+    tile[row][col].isBomb = 1;
   }
 }
 
@@ -42,16 +42,16 @@ int checkCoord(int r, int c) {
 int neighborsBombs(int r, int c) {
   int amount = 0;
 
-  if(checkCoord(r - 1, c) && field[r - 1][c].isBomb) {
+  if(checkCoord(r - 1, c) && tile[r - 1][c].isBomb) {
     amount++;
   }
-  if(checkCoord(r + 1, c) && field[r + 1][c].isBomb) {
+  if(checkCoord(r + 1, c) && tile[r + 1][c].isBomb) {
     amount++;
   }
-  if(checkCoord(r, c - 1) && field[r][c - 1].isBomb) {
+  if(checkCoord(r, c - 1) && tile[r][c - 1].isBomb) {
     amount++;
   }
-  if(checkCoord(r, c + 1) && field[r][c + 1].isBomb) {
+  if(checkCoord(r, c + 1) && tile[r][c + 1].isBomb) {
     amount++;
   }
 
@@ -61,7 +61,7 @@ int neighborsBombs(int r, int c) {
 void bombsCounter() {
   for(row = 0; row < length; row++) {
     for(col = 0; col < length; col++) {
-      field[row][col].neighbors = neighborsBombs(row, col);
+      tile[row][col].neighbors = neighborsBombs(row, col);
     }
   }
 }
@@ -78,11 +78,11 @@ void renderField() {
     printf("   %d\t|", row);
     
     for(col = 0; col < length; col++) {
-      if(field[row][col].isOpen){
-        if(field[row][col].isBomb){
+      if(tile[row][col].isOpen){
+        if(tile[row][col].isBomb){
           printf("*");
         }
-        printf("%d", field[row][col].neighbors);
+        printf("%d", tile[row][col].neighbors);
       }
       printf(" ");
       printf("\t|");
@@ -94,10 +94,10 @@ void renderField() {
 void openTile(int r, int c) {
   int isCoordValid = checkCoord(r, c);
 
-  if(isCoordValid == 1 && field[r][c].isOpen == 0) {
-    field[r][c].isOpen = 1;
+  if(isCoordValid == 1 && tile[r][c].isOpen == 0) {
+    tile[r][c].isOpen = 1;
 
-    if(field[r][c].neighbors == 0) {
+    if(tile[r][c].neighbors == 0) {
       openTile(r - 1, c);
       openTile(r + 1, c);
       openTile(r, c - 1);
@@ -111,7 +111,7 @@ int victory() {
 
   for(row = 0; row < length; row) {
     for(col = 0; col < length; col++) {
-      if(field[row][col].isOpen == 0 && field[row][col].isBomb == 0) {
+      if(tile[row][col].isOpen == 0 && tile[row][col].isBomb == 0) {
         amount++;
       }
     }
@@ -134,13 +134,13 @@ void play() {
         printf("\nInvalid coords!");
       }
     } while(
-      checkCoord(selectedRow, selectedCol) == 0 || field[selectedRow][selectedCol].isOpen == 1
+      checkCoord(selectedRow, selectedCol) == 0 || tile[selectedRow][selectedCol].isOpen == 1
     );
 
     openTile(selectedRow, selectedCol);
-  }while(victory() != 0 && field[selectedRow][selectedCol].isBomb == 0);
+  }while(victory() != 0 && tile[selectedRow][selectedCol].isBomb == 0);
 
-  if(field[selectedRow][selectedCol].isBomb == 1) {
+  if(tile[selectedRow][selectedCol].isBomb == 1) {
     printf("\n\t\tDerrota!!!\n");
   }
   printf("\n\t\tVITÓRIA!!!\n");

@@ -2,67 +2,23 @@
 #include <stdlib.h>
 #include <time.h>
 
-void quickSort(int arr[], int left, int right);
-int partition(int arr[], int left, int right);
-void swap(int *left, int *right);
-
 int main() {
-  int i, arr[15];
-  int length = sizeof(arr) / sizeof(arr[0]);
+  int i, j, matrix[4][5];
+  int rows = sizeof(matrix) / sizeof(matrix[0]);
+  int cols = sizeof(*matrix) / sizeof(matrix[0][0]);
+  int length = sizeof(matrix) / sizeof(matrix[0][0]);
 
-  for(i = 0; i < length; i++) {
-    arr[i] = rand() % 100;
-    printf("%d, ", arr[i]);
-  }
-  printf("\n");
-
-  quickSort(arr, 0, length - 1);
-
-  for(i = 0; i < length; i++) {
-    printf("%d, ", arr[i]);
-  }
-  printf("\n");
-
-  return 0;
-}
-
-void quickSort(int arr[], int left, int right) {
-  if(left < right) {
-    int pivotIndex = partition(arr, left, right);
-
-    quickSort(arr, left, pivotIndex - 1);
-
-    quickSort(arr, pivotIndex + 1, right);
-  }
-}
-
-int partition(int arr[], int left, int right) {
   srand(time(NULL));
 
-  int pivotValue = left + (rand() % (right - left));
-
-  if(pivotValue != right) {
-    swap(&arr[pivotValue], &arr[right]);
-  }
-
-  int pivot = arr[right];
-
-  int i = left;
-
-  for(int j = left; j < right; j++) {
-    if(arr[j] <= pivot) {
-      swap(&arr[j], &arr[i]);
-      i++;
+  for(i = 0; i < 4; i++) {
+    for(j = 0; j < 5; j++) {
+      matrix[i][j] = rand() % 2;
+      printf("%d ", matrix[i][j]);
     }
+    printf("\n");
   }
 
-  swap(&arr[i], &arr[right]);
+  printf("rows: [%d]\ncols: [%d]\nlength: %d\n", rows, cols, length);
 
-  return i;
-}
-
-void swap(int *left, int *right) {
-  int aux = *left;
-  *left = *right;
-  *right = aux;
+  return 0;
 }
