@@ -2,7 +2,9 @@
   "files.associations": {
     "inttypes.h": "c",
     "assert.h": "c",
-    "MINESWEEPER.C": "cpp"
+    "MINESWEEPER.C": "cpp",
+    "signal.h": "c",
+    "features.h": "c"
   },
   "C_Cpp.errorSquiggles": "enabled"
 }

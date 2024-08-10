@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-#include <string.h>
-/* #include "practice.c"
- */
+
+
 typedef struct Node {
   int val;
   struct Node *next;

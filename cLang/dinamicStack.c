@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <string.h>
-#include <inttypes.h>
-#include "practice.c"
 
 typedef struct Date {
   int day, month, year;
@@ -26,7 +23,7 @@ Person readPerson() {
   fgets(person.name, sizeof(person.name), stdin);
   
   printf("\nType birthday dd/mm/yyyy: ");
-  scanf("%d/%d/%d", &person.date.day, &person.date.month, &person.date.year);
+  scanf("%d%d%d", &person.date.day, &person.date.month, &person.date.year);
   return person;
 }
 
@@ -41,7 +38,7 @@ Node* push(Node *top) {
     new->person = readPerson();
     new->next = top;
     return new;
-  } else {}
+  }
 
   printf("\nMemory allocation error...!\n");
   return NULL;
