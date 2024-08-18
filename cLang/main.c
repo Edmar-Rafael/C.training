@@ -6,24 +6,39 @@
 
 
 int main() {
-  int i, j, arr[11];
-  int length = sizeof(arr) / sizeof(arr[0]);
-  int count;
+  int choice, value;
+  Node *remove;
+  Queue queue;
 
-  srand(time(NULL));
-  
-  for(i = 0; i < length; i++) {
-    count = 0;
-    arr[i] = rand() % 100;
+  createQueue(&queue);
 
-    for(j = 2; j <= arr[i] / 2; j++) {
-      if(arr[i] % j == 0) {
-        count++;
-      }
+  do {
+    printf(" 0 - Exit\n 1 - Insert\n 2 - Remove\n 3 - Print Queue\n");
+    scanf("%d", &choice);
+    getchar;
+
+    switch(choice) {
+      case 1:
+        printf("Type a value: ");
+        scanf("%d", &value);
+        enqueue(&queue, value);
+      break;
+
+      case 2:
+        remove = dequeue(&queue);
+        remove ? printf("\n%d removed!\n\n", remove->data) : printf(" ");
+        free(remove);
+      break;
+
+      case 3:
+        printQueue(&queue);
+      break;
+
+      default:
+        choice != 0 ? printf("Invalid option!\n\n") : printf("Good bye!!!\n\n");
+      break;
     }
-
-    count == 0 || arr[i] == 1 ? printf("%d prime.\n", arr[i]) : printf("%d not prime.\n", arr[i]);
-  }
+  } while(choice !=0);
 
   return 0;
 }
