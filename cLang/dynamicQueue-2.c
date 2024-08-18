@@ -27,13 +27,10 @@ void enqueue(Queue *queue, int val) {
 
     if(queue->front == NULL) {
       queue->front = newNode;
+      queue->rear = newNode;
     } else {
-      Node *aux = queue->front;
-
-      while(aux->next) {
-        aux = aux->next;
-      }
-      aux->next = newNode;
+      queue->rear->next = newNode;
+      queue->rear = newNode;
     }
 
     queue->length++;
