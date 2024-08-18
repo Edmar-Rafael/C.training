@@ -54,7 +54,7 @@ Node* dequeue(Queue *queue) {
 void printQueue(Queue *queue) {
   Node *aux = queue->front;
 
-  printf("-----------Queue length: %d----------\n\n", queue->length);
+  printf("\n-----Queue length: %d-----\n\n", queue->length);
 
   while(aux) {
     printf("%d\n", aux->data);
