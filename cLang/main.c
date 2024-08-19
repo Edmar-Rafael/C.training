@@ -6,42 +6,24 @@
 
 
 int main() {
-  int choice, value;
-  Node *remove, *queue = NULL;
+  int i, arr[11], el = 43;
+  int length = sizeof(arr) / sizeof(arr[0]);
+  Node *root = NULL;
 
-  do {
-    printf(" 0 - Exit\n 1 - Insert\n 2 - Remove\n 3 - Print Queue\n 4 - Priority Insertion\n");
-    scanf("%d", &choice);
-    getchar;
+  printf("Inserted: ");
+  for(i = 0; i < length; i++) {
+    arr[i] = rand() % 100;
+    root = insert(root, arr[i]);
+    printf("%d, ", arr[i]);
+  }
 
-    switch(choice) {
-      case 1:
-        printf("Type a value: ");
-        scanf("%d", &value);
-        enqueue(&queue, value);
-      break;
+  printf("\nInorder traversal: ");
+  inorderTraversal(root);
+  printf("\n");
 
-      case 2:
-        remove = dequeue(&queue);
-        remove ? printf("\n%d removed!\n\n", remove->data) : printf(" ");
-        free(remove);
-      break;
+  Node *aux = search(root, el);
 
-      case 3:
-        printQueue(queue);
-      break;
-
-      case 4:
-        printf("Type a value: ");
-        scanf("%d", &value);
-        priorityEnqueue(&queue, value);
-      break;
-
-      default:
-        choice != 0 ? printf("Invalid option!\n\n") : printf("Good bye!!!\n\n");
-      break;
-    }
-  } while(choice !=0);
+  aux ? printf("\n{%d} found.\n", aux->data) : printf("\n(x) {%d} not found.\n", el);
 
   return 0;
 }
