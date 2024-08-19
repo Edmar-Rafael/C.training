@@ -28,10 +28,10 @@ void enqueue(Node **queue, int val) {
   } 
 }
 
-Node* dequeue(Node **top) {  
-  if(*top) {
-    Node *rm = *top;
-    *top = rm->next;
+Node* dequeue(Node **queue) {  
+  if(*queue) {
+    Node *rm = *queue;
+    *queue = rm->next;
     return rm;
   }
 
