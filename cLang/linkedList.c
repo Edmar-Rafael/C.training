@@ -44,7 +44,7 @@ void insertAtMiddle(Node **list, int val) {
   }
 }
 
-void insertAtSpecificPos(Node **list, int val, int pos) {
+void insertAtSpecificPos(Node **list, int val, int after) {
   Node *newNode = (struct Node *) malloc(sizeof(struct Node));
 
   if(newNode) {
@@ -56,7 +56,7 @@ void insertAtSpecificPos(Node **list, int val, int pos) {
     } else {
       Node *aux = *list;
 
-      while(aux->data != pos && aux->next) {
+      while(aux->data != after && aux->next) {
         aux = aux->next;
       }
 
@@ -163,13 +163,14 @@ void printList(Node *list) {
 }
 
 int main() {
-  int choice, val, at;
-  char choiceTable1[] = "0 - Exit\n1 - insert at begin\n2 - Remove\n3 - Print\n4 - insert at end\n";
-  char choiceTable2[] = "5 - insert at middle\n6 - insert at specific\n7 - Remove at end\n\n";
+  int choice, val, after;
+  char option1[] = "0 - Exit\n1 - insert at begin\n2 - Remove\n3 - Print\n4 - insert at end\n";
+  char option2[] = "5 - insert at middle\n6 - insert at specific\n7 - Remove at end\n";
+  char option3[] = "8 - Clear list\n\n";
   Node *remove, *list = NULL;
 
   do {
-    printf("%s%s", choiceTable1, choiceTable2);
+    printf("%s%s%s", option1, option2, option3);
     scanf("%d", &choice);
     getchar();
 
@@ -206,14 +207,24 @@ int main() {
         printf("Type a number: ");
         scanf("%d", &val);
         printf("insert after: ");
-        scanf("%d", &at);
-        insertAtSpecificPos(&list, val, at);
+        scanf("%d", &after);
+        insertAtSpecificPos(&list, val, after);
       break;
 
       case 7:
         remove = removeAtEnd(&list);
         remove ? printf("%d removed.\n\n", remove->data) : printf("Nothing to remove.\n\n");
         free(remove);
+      break;
+
+      case 8:
+        remove = removeAll(&list);
+        if(remove) {
+          printf("Erased items: ");
+          printList(remove);
+        } else {
+          printf("Nothing to remove!\n\n");
+        }
       break;
 
       default:
