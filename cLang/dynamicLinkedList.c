@@ -139,6 +139,50 @@ Node* removeAtEnd(Node **list) {
   return NULL;
 }
 
+void changePlace(Node **list, int key1, int key2) {
+  Node *aux = *list;
+  int count = 0;
+
+  if(aux) {
+    while(aux) {
+      if(aux->data == key1) {
+        aux->data = key2;
+        count++;
+        if(aux->next) {
+          aux = aux->next;
+          count--;
+        }
+      }
+      if(aux->data == key2 && count == 0) {
+        aux->data = key1;
+      }
+
+      aux = aux->next;
+    }
+  } else {
+    printf("Empty list!\n\n");
+  }
+}
+
+Node* listInverter(Node **list) {
+  Node *current = *list;
+  Node *invertedList = NULL;
+
+  if(current) {
+    while(current) {
+      Node *next = current->next;
+      current->next = invertedList;
+      invertedList = current;
+      current = next;
+    }
+
+    return invertedList;
+  }
+
+  printf("Empty list\n");
+  return NULL;
+}
+
 Node* removeAll(Node **list) {
   if(*list) {
     Node *rm = *list;
