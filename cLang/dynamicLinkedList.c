@@ -139,6 +139,17 @@ Node* removeAtEnd(Node **list) {
   return NULL;
 }
 
+Node* removeAll(Node **list) {
+  if(*list) {
+    Node *rm = *list;
+    *list = NULL;
+    return rm;
+  }
+
+  printf("Empty list!\n");
+  return NULL;
+}
+
 void changePlace(Node **list, int key1, int key2) {
   Node *aux = *list;
   int count = 0;
@@ -180,17 +191,6 @@ Node* listInverter(Node **list) {
   }
 
   printf("Empty list\n");
-  return NULL;
-}
-
-Node* removeAll(Node **list) {
-  if(*list) {
-    Node *rm = *list;
-    *list = NULL;
-    return rm;
-  }
-
-  printf("Empty list!\n");
   return NULL;
 }
 
