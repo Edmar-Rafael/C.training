@@ -18,6 +18,17 @@ void insertAtBegin(Node **list, int val) {
   }
 }
 
+int countNodes(Node *head) {
+  int count = 0;
+
+  while(head) {
+    count++;
+    head = head->next;
+  }
+
+  return count;
+}
+
 void insertAtMiddle(Node **list, int val) {
   Node *newNode = (struct Node *) malloc(sizeof(struct Node));
 
@@ -91,17 +102,6 @@ void insertAtEnd(Node **list, int val) {
   }
 }
 
-int countNodes(Node *head) {
-  int count = 0;
-
-  while(head) {
-    count++;
-    head = head->next;
-  }
-
-  return count;
-}
-
 Node* removeAtbegin(Node **list) {
   if(*list) {
     Node *rm = *list;
@@ -114,10 +114,11 @@ Node* removeAtbegin(Node **list) {
 }
 
 Node* removeAtEnd(Node **list) {
-  Node *rm, *aux = *list;
+  Node *aux = *list;
 
   if(aux) {
     int nodes = countNodes(aux);
+    Node *rm;
 
     if(nodes == 1) {
       rm = aux;
@@ -136,6 +137,31 @@ Node* removeAtEnd(Node **list) {
   }
 
   printf("Empty list!\n");
+  return NULL;
+}
+
+Node* removeAtSpecificPos(Node **list, int key) {
+  Node *aux = *list;
+
+  if(aux) {
+    Node *rm, *prev;
+
+    if(aux && aux->data == key) {
+      rm = *list;
+      *list = aux->next;
+      return rm;  
+    }
+
+    while(aux->data != key) {
+      prev = aux;
+      aux = aux->next;
+    }
+
+    rm = aux;
+    prev->next = aux->next;
+    return rm;
+  }
+
   return NULL;
 }
 
@@ -265,7 +291,7 @@ int main() {
       case 8:
         printf("Type a number to remove: ");
         scanf("%d", &pos);
-        remove = removeAtspecificPos(&list, pos);
+        remove = removeAtSpecificPos(&list, pos);
         remove ? printf("%d removed.\n\n", remove->data) : printf("%d not found.\n\n", pos);
       break;
 

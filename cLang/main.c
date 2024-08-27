@@ -64,7 +64,7 @@ int main() {
       case 8:
         printf("Type a number to remove: ");
         scanf("%d", &pos);
-        remove = removeAtspecificPos(&list, pos);
+        remove = removeAtSpecificPos(&list, pos);
         remove ? printf("%d removed.\n\n", remove->data) : printf("%d not found.\n\n", pos);
       break;
 
