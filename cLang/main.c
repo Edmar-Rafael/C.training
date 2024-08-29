@@ -10,7 +10,7 @@ int main() {
   char option1[] = "0 - Exit\n1 - insert at begin\n2 - Remove\n3 - Print\n4 - insert at end\n";
   char option2[] = "5 - insert at middle\n6 - insert at specific\n7 - Remove at end\n";
   char option3[] = "8 - Remove at specific position\n9 - Clear list\n10 - change positions\n";
-  char option4[] = "11 - To invert\n\n";
+  char option4[] = "11 - To invert\n12 - Sort list\n\n";
   Node *remove, *list = NULL;
 
   do {
@@ -79,16 +79,16 @@ int main() {
       break;
 
       case 10:
-        printf("Type the first node: ");
-        scanf("%d", &val);
-        printf("Type the node to change with the first: ");
-        scanf("%d", &after);
         changePlace(&list, val, after);
       break;
 
       case 11:
         list = listInverter(&list);
         list ? printf("List was inverted.\n\n") : printf("Nothing to invert.\n\n");
+      break;
+
+      case 12:
+        listSort(&list);
       break;
 
       default:
