@@ -6,6 +6,17 @@ typedef struct Node {
   struct Node *next;
 } Node;
 
+int countNodes(Node *head) {
+  int count = 0;
+
+  while(head) {
+    count++;
+    head = head->next;
+  }
+
+  return count;
+}
+
 void insertAtBegin(Node **list, int val) {
   Node *newNode = (struct Node *) malloc(sizeof(struct Node));
 
@@ -16,17 +27,6 @@ void insertAtBegin(Node **list, int val) {
   } else {
     printf("Memory allocation error...!");
   }
-}
-
-int countNodes(Node *head) {
-  int count = 0;
-
-  while(head) {
-    count++;
-    head = head->next;
-  }
-
-  return count;
 }
 
 void insertAtMiddle(Node **list, int val) {
@@ -99,6 +99,31 @@ void insertAtEnd(Node **list, int val) {
     }
   } else {
     printf("Memory allocation error...!");
+  }
+}
+
+void listSort(Node **list) {
+  Node *aux = *list;
+  int i, *arr;
+  int length = countNodes(aux);
+
+  if(aux && length > 1) {
+    Node *sortedList = NULL;
+
+    for(i = 0; i < length; i++) {
+      arr[i] = aux->data;
+      aux = aux->next;
+    }
+
+    quickSort(arr, 0, length - 1);
+
+    *list = NULL;
+
+    for(i = 0; i < length; i++) {
+      insertAtEnd(list, arr[i]);
+    }
+  } else {
+    printf("You need at least two elements in the list.\n\n");
   }
 }
 
@@ -180,7 +205,12 @@ void changePlace(Node **list, int key1, int key2) {
   Node *aux = *list;
   int count = 0;
 
-  if(aux) {
+  if(aux && countNodes(aux) > 1) {
+    printf("Type the first node: ");
+    scanf("%d", &key1);
+    printf("Type the node to change with the first: ");
+    scanf("%d", &key2);
+
     while(aux) {
       if(aux->data == key1) {
         aux->data = key2;
@@ -197,7 +227,7 @@ void changePlace(Node **list, int key1, int key2) {
       aux = aux->next;
     }
   } else {
-    printf("Empty list!\n\n");
+    printf("Not enough elements!\n\n");
   }
 }
 
