@@ -108,8 +108,6 @@ void listSort(Node **list) {
   int length = countNodes(aux);
 
   if(aux && length > 1) {
-    Node *sortedList = NULL;
-
     for(i = 0; i < length; i++) {
       arr[i] = aux->data;
       aux = aux->next;
