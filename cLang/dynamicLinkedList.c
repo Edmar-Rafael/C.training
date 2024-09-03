@@ -262,7 +262,7 @@ void printList(Node *list) {
 
 int main() {
   int choice, val, after, pos;
-  char option1[] = "0 - Exit\n1 - insert at begin\n2 - Remove\n3 - Print\n4 - insert at end\n";
+  char option1[] = "0 - Exit\n1 - insert at begin\n2 - Remove at begin\n3 - Print\n4 - insert at end\n";
   char option2[] = "5 - insert at middle\n6 - insert at specific\n7 - Remove at end\n";
   char option3[] = "8 - Remove at specific position\n9 - Clear list\n10 - change positions\n";
   char option4[] = "11 - To invert\n\n";

@@ -6,15 +6,18 @@
 
 
 int main() {
-  int choice, val, after, pos;
-  char option1[] = "0 - Exit\n1 - insert at begin\n2 - Remove\n3 - Print\n4 - insert at end\n";
-  char option2[] = "5 - insert at middle\n6 - insert at specific\n7 - Remove at end\n";
-  char option3[] = "8 - Remove at specific position\n9 - Clear list\n10 - change positions\n";
-  char option4[] = "11 - To invert\n12 - Sort list\n\n";
-  Node *remove, *list = NULL;
+  int choice, val, after;
+  char *option = "0 - Exit\n1 - insert at begin\n2 - Remove at begin\n3 - Print list\n";
+  char *option2 = "4 - Insert at middle\n5 - Insert at specific pos\n6 - Insert at end\n";
+  char *option3 = "7 - Remove at end\n8 - Remove specific Item\n9 - Clear list\n";
+  char *option4 = "10 - Change elements\n11 - sort\n12 - List inverter\n13 - Find Element\n\n";
+  List list;
+  Node *remove;
+
+  createList(&list);
 
   do {
-    printf("%s%s%s%s", option1, option2, option3, option4);
+    printf("%s%s%s%s", option, option2, option3, option4);
     scanf("%d", &choice);
     getchar();
 
@@ -26,9 +29,8 @@ int main() {
       break;
 
       case 2:
-        remove = removeAtbegin(&list);
+        remove = removeAtBegin(&list);
         remove ? printf("%d removed.\n\n", remove->data) : printf("Nothing to remove.\n\n");
-        free(remove);
       break;
 
       case 3:
@@ -36,46 +38,32 @@ int main() {
       break;
 
       case 4:
-        printf("Type a number: ");
-        scanf("%d", &val);
-        insertAtEnd(&list, val);
+        insertAtMiddle(&list, val);
       break;
 
       case 5:
-        printf("Type a number: ");
-        scanf("%d", &val);
-        insertAtMiddle(&list, val);
+        insertAtSpecificPos(&list, val, after);
       break;
 
       case 6:
         printf("Type a number: ");
         scanf("%d", &val);
-        printf("insert after: ");
-        scanf("%d", &after);
-        insertAtSpecificPos(&list, val, after);
+        insertAtEnd(&list, val);
       break;
 
       case 7:
         remove = removeAtEnd(&list);
         remove ? printf("%d removed.\n\n", remove->data) : printf("Nothing to remove.\n\n");
-        free(remove);
       break;
 
       case 8:
-        printf("Type a number to remove: ");
-        scanf("%d", &pos);
-        remove = removeAtSpecificPos(&list, pos);
-        remove ? printf("%d removed.\n\n", remove->data) : printf("%d not found.\n\n", pos);
+        remove = removeAtSpecificPos(&list, val);
+        remove ? printf("%d removed.\n\n", remove->data) : printf("Item not found.\n\n");
       break;
 
       case 9:
-        remove = removeAll(&list);
-        if(remove) {
-          printf("Erased items: ");
-          printList(remove);
-        } else {
-          printf("Nothing to remove!\n\n");
-        }
+        removeAll(&list);
+        list.length == 0 ? printf("Nothing to remove.\n\n") : printf("list erased.\n\n");
       break;
 
       case 10:
@@ -83,18 +71,23 @@ int main() {
       break;
 
       case 11:
-        list = listInverter(&list);
-        list ? printf("List was inverted.\n\n") : printf("Nothing to invert.\n\n");
-      break;
-
-      case 12:
         listSort(&list);
       break;
 
+      case 12:
+        listInverter(&list);
+      break;
+
+      case 13:
+        remove = findItem(&list, val);
+        remove ? printf("%d found.\n\n", remove->data) : printf("Element does'nt exist.\n\n");
+      break;
+
       default:
-        choice != 0 ? printf("invalid option!\n") : printf("Good bye!\n\n");
+        choice != 0 ? printf("Invalid option!\n") : printf("Good bye!\n\n");
+      break;
     }
   } while(choice != 0);
-  
+
   return 0;
 }
