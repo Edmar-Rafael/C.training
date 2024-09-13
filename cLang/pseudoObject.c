@@ -32,8 +32,5 @@ int main() {
 
   person2->show(person2);
 
-  char e[] = "Edmar Rafael Henches";
-  
-  printf("%ld \n", sizeof(e));
   return 0;
 }

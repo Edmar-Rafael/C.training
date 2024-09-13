@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "mergeSort.c"
 
 typedef struct Node {
   int data;
@@ -103,25 +104,10 @@ void insertAtEnd(Node **list, int val) {
 }
 
 void listSort(Node **list) {
-  Node *aux = *list;
-  int i, *arr;
-  int length = countNodes(aux);
-
-  if(aux && length > 1) {
-    for(i = 0; i < length; i++) {
-      arr[i] = aux->data;
-      aux = aux->next;
-    }
-
-    quickSort(arr, 0, length - 1);
-
-    *list = NULL;
-
-    for(i = 0; i < length; i++) {
-      insertAtEnd(list, arr[i]);
-    }
+  if(*list) {
+    mergeSort(list);
   } else {
-    printf("You need at least two elements in the list.\n\n");
+    printf("List contains only one element or, its empty.\n\n");
   }
 }
 
@@ -265,7 +251,7 @@ int main() {
   char option1[] = "0 - Exit\n1 - insert at begin\n2 - Remove at begin\n3 - Print\n4 - insert at end\n";
   char option2[] = "5 - insert at middle\n6 - insert at specific\n7 - Remove at end\n";
   char option3[] = "8 - Remove at specific position\n9 - Clear list\n10 - change positions\n";
-  char option4[] = "11 - To invert\n\n";
+  char option4[] = "11 - To invert\n12 - sort\n\n";
   Node *remove, *list = NULL;
 
   do {
@@ -344,6 +330,10 @@ int main() {
       case 11:
         list = listInverter(&list);
         list ? printf("List was inverted.\n\n") : printf("Nothing to invert.\n\n");
+      break;
+
+      case 12:
+        listSort(&list);
       break;
 
       default:

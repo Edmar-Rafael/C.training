@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "mergeSort.c"
 
 typedef struct Node {
   int data;
@@ -69,27 +70,12 @@ void changePlace(List *list, int key1, int key2) {
 }
 
 void listSort(List *list) {
-  Node *aux = list->head;
+  Node *head = list->head;
 
-  if(aux && list->length >= 2) {
-    int i, *arr;
-    int length = list->length;
-
-    for(i = 0; i < length; i++) {
-      arr[i] = aux->data;
-      aux = aux->next;
-    }
-
-    quickSort(arr,0, length - 1);
-
-    list->head = NULL;
-
-    for(i = 0; i < length; i ++) {
-      insertAtEnd(list, arr[i]);
-      list->length--;
-    }
+  if(head && list->length > 1) {
+    mergeSort(&head);
   } else {
-    printf("Not enough elements. At least 2.\n\n");
+    printf("List contains only one element or, its empty.\n\n");
   }
 }
 
