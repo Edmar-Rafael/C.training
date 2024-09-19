@@ -57,7 +57,7 @@ void printQueue(Queue *queue) {
   printf("\n-----Queue length: %d-----\n\n", queue->length);
 
   while(aux) {
-    printf("%d\n", aux->data);
+    printf("%d - ", aux->data);
     aux = aux->next;
   }
 

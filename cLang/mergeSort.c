@@ -2,19 +2,20 @@
 #include <stdlib.h>
 #include "practice.h"
 
-void frontBackSplit(Node *source, Node **frontref, Node **backRef) {
+void splitMiddle(Node *source, Node **frontRef, Node **backRef) {
   Node *slow = source;
   Node *fast = source->next;
 
   while(fast) {
     fast = fast->next;
+
     if(fast) {
       slow = slow->next;
       fast = fast->next;
     }
   }
 
-  *frontref = source;
+  *frontRef = source;
   *backRef = slow->next;
   slow->next = NULL;
 }
@@ -47,10 +48,11 @@ Node* mergeSort(Node **headRef) {
     return head;
   }
 
-  frontBackSplit(head, &a, &b);
+  splitMiddle(head, &a, &b);
 
   mergeSort(&a);
   mergeSort(&b);
 
   *headRef = sortedMerge(a, b);
+  return *headRef;
 }

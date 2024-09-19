@@ -2,10 +2,6 @@
 #include <stdlib.h>
 #include "mergeSort.c"
 
-typedef struct Node {
-  int data;
-  struct Node *next;
-} Node;
 
 int countNodes(Node *head) {
   int count = 0;
@@ -16,6 +12,27 @@ int countNodes(Node *head) {
   }
 
   return count;
+}
+
+Node* findItem(Node *list, int item) {
+  Node *res = NULL;
+  if(list) {
+    printf("Type a value: ");
+    scanf("%d", &item);
+
+    while(list && item != list->data) {
+      list = list->next;
+    }
+
+    if(list) {
+      res = list;
+    }
+
+    return res;
+  }
+  
+  printf("Empty list.");
+  return NULL;
 }
 
 void insertAtBegin(Node **list, int val) {
@@ -41,9 +58,10 @@ void insertAtMiddle(Node **list, int val) {
       *list = newNode;
     } else {
       Node *aux = *list;
-      int nodes = countNodes(aux);
+      int nodes = countNodes(aux) / 2;
+      int i = 0;
 
-      while(nodes / 2 > 1) {
+      while(nodes > 1) {
         aux = aux->next;  
         nodes--;
       }
@@ -251,7 +269,7 @@ int main() {
   char option1[] = "0 - Exit\n1 - insert at begin\n2 - Remove at begin\n3 - Print\n4 - insert at end\n";
   char option2[] = "5 - insert at middle\n6 - insert at specific\n7 - Remove at end\n";
   char option3[] = "8 - Remove at specific position\n9 - Clear list\n10 - change positions\n";
-  char option4[] = "11 - To invert\n12 - sort\n\n";
+  char option4[] = "11 - To invert\n12 - sort\n13 - Find Item\n\n";
   Node *remove, *list = NULL;
 
   do {
@@ -334,6 +352,11 @@ int main() {
 
       case 12:
         listSort(&list);
+      break;
+
+      case 13:
+        list = findItem(list, val);
+        list ? printf("%d Found.\n\n", remove->data) : printf("Element does'nt exist.\n\n");
       break;
 
       default:

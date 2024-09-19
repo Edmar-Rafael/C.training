@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include "mergeSort.c"
 
-typedef struct Node {
+/* typedef struct Node {
   int data;
   struct Node *next;
-} Node;
+} Node; */
 
 typedef struct List {
   int length;
@@ -29,10 +29,10 @@ void listInverter(List *list) {
     }
 
     list->head = NULL;
+    list->length = 0;
 
     for(i = 0; i < length; i++) {
       insertAtBegin(list, arr[i]);
-      list->length--;
     }
   } else {
     printf("Not enough elements.\n\n");
@@ -143,9 +143,9 @@ void insertAtMiddle(List *list, int val) {
       list->head = newNode;
     } else {
       Node *aux = list->head;
-      int nodes = list->length;
+      int nodes = list->length / 2;
 
-      while(nodes / 2 > 1) {
+      while(nodes > 1) {
         aux = aux->next;
         nodes--;
       }
