@@ -61,7 +61,7 @@ void insertAtMiddle(Node **list, int val) {
       int nodes = countNodes(aux) / 2;
       int i = 0;
 
-      while(nodes > 1) {
+      while(nodes >  1) {
         aux = aux->next;  
         nodes--;
       }
@@ -76,8 +76,16 @@ void insertAtMiddle(Node **list, int val) {
 
 void insertAtSpecificPos(Node **list, int val, int after) {
   Node *newNode = (struct Node *) malloc(sizeof(struct Node));
+  int nodes = countNodes(*list);
 
   if(newNode) {
+    printf("Type a number: ");
+    scanf("%d", &val);
+    if(nodes > 1) {
+      printf("insert after: ");
+      scanf("%d", &after);
+    }
+
     newNode->data = val;
     newNode->next = NULL;
 
@@ -203,33 +211,70 @@ Node* removeAll(Node **list) {
   return NULL;
 }
 
-void changePlace(Node **list, int key1, int key2) {
-  Node *aux = *list;
-  int count = 0;
+Node* changePlace(Node **list, int key1, int key2) {
+  Node *current = *list;
 
-  if(aux && countNodes(aux) > 1) {
+  if(current && countNodes(current) > 1) {
     printf("Type the first node: ");
     scanf("%d", &key1);
     printf("Type the node to change with the first: ");
     scanf("%d", &key2);
 
-    while(aux) {
-      if(aux->data == key1) {
-        aux->data = key2;
-        count++;
-        if(aux->next) {
-          aux = aux->next;
-          count--;
-        }
-      }
-      if(aux->data == key2 && count == 0) {
-        aux->data = key1;
+    if(key1 == key2) {
+      printf("\nSame values are'nt allowed.\n\n");
+      return *list;
+    }
+
+    Node *currentKey1 = NULL, *currentKey2 = NULL;
+    Node *prevKey1 = NULL, *prevKey2 = NULL;
+
+    while(current) {
+      if(current->data == key1) {
+        currentKey1 = current;
+        break;
       }
 
-      aux = aux->next;
+      prevKey1 = current;
+      current = current->next;
     }
+
+    current = *list;
+
+    while(current) {
+      if(current->data == key2) {
+        currentKey2 = current;
+        break;
+      }
+
+      prevKey2 = current;
+      current = current->next;
+    }
+
+    if(currentKey1 == NULL || currentKey2 == NULL) {
+      printf("\nSome value doesnt exist.\n\n");
+      return *list;
+    }
+
+    if(prevKey1) {
+      prevKey1->next = currentKey2;
+    } else {
+      *list = currentKey2;
+    }
+
+    if(prevKey2) {
+      prevKey2->next = currentKey1;
+    } else {
+      *list = currentKey1;
+    }
+
+    Node *aux = currentKey2->next;
+    currentKey2->next = currentKey1->next;
+    currentKey1->next = aux;
+
+    return *list;
   } else {
     printf("Not enough elements!\n\n");
+    return NULL;
   }
 }
 
@@ -307,10 +352,6 @@ int main() {
       break;
 
       case 6:
-        printf("Type a number: ");
-        scanf("%d", &val);
-        printf("insert after: ");
-        scanf("%d", &after);
         insertAtSpecificPos(&list, val, after);
       break;
 
@@ -325,6 +366,7 @@ int main() {
         scanf("%d", &pos);
         remove = removeAtSpecificPos(&list, pos);
         remove ? printf("%d removed.\n\n", remove->data) : printf("%d not found.\n\n", pos);
+        free(remove);
       break;
 
       case 9:
@@ -335,14 +377,11 @@ int main() {
         } else {
           printf("Nothing to remove!\n\n");
         }
+        free(remove);
       break;
 
       case 10:
-        printf("Type the first node: ");
-        scanf("%d", &val);
-        printf("Type the node to change with the first: ");
-        scanf("%d", &after);
-        changePlace(&list, val, after);
+        list = changePlace(&list, val, after);
       break;
 
       case 11:
