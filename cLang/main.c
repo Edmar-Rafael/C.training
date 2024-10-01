@@ -7,12 +7,13 @@
 int main() {
   char *menu1 = "0 - Exit\n1 - Insert at begin\n2 - Remove at begin\n3 - show\n4 - Insert at end\n";
   char *menu2 = "5 - Insert at middle\n6 - Insert after specific position\n7 - Remove at end\n";
-  char *menu3 = "8 - Remove specific item\n9 - Clear list\n10 - To sort list\n11 - To reverse\n\n";
+  char *menu3 = "8 - Remove specific item\n9 - Clear list\n10 - To sort list\n11 - To reverse\n";
+  char *menu4 = "12 - swap position\n\n";
   int choice, val, key;
   Node *remove, *list = NULL;
 
   do {
-    printf("%s%s%s", menu1, menu2, menu3);
+    printf("%s%s%s%s", menu1, menu2, menu3, menu4);
     scanf("%d", &choice);
     getchar();
 

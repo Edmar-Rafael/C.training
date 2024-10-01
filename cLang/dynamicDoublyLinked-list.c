@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include "practice.c"
 
 typedef struct Node {
   int data;
@@ -23,11 +25,80 @@ void showList(Node *headRef) {
   printf("Nodes: %d\n", countNodes(headRef));
 
   while(headRef) {
-    printf("%d -> ", headRef->data);
+    printf("%d <-> ", headRef->data);
     headRef = headRef->next;
   }
 
   printf("\n-------End of list--------\n\n");
+}
+
+Node* insertionSort(Node **headRef) {
+  if(*headRef == NULL) {
+    return *headRef;
+  }
+  
+  Node *current = *headRef;
+  Node *sorted = NULL;
+
+  while(current) {
+    Node *next = current->next;
+
+    if(sorted == NULL || sorted->data >= current->data) {
+      current->next = sorted;
+
+      if(sorted) {
+        sorted->previous = current;
+      }
+
+      sorted = current;
+      sorted->previous = NULL;
+    } else {
+      Node *currentSorted = sorted;
+
+      while(currentSorted->next && currentSorted->next->data < current->data) {
+        currentSorted = currentSorted->next;
+      }
+
+      current->next = currentSorted->next;
+
+      if(currentSorted->next) {
+        currentSorted->next->previous = current;
+      }
+
+      currentSorted->next = current;
+      current->previous = currentSorted;
+    }
+
+    current = next;
+  }
+
+  return sorted;
+}
+
+Node* listReverter(Node **headRef) {
+  Node *head = *headRef;
+  int nodes = countNodes(head);
+
+  if(head == NULL) {
+    return *headRef;
+  }
+
+  if(nodes > 1) {
+    Node *prev;
+
+    while(head) {
+      prev = head->previous;
+      head->previous = head->next;
+      head->next = prev;
+      head = head->previous;
+    }
+
+    if(prev) {
+      *headRef = prev->previous;
+    }
+
+    return *headRef;
+  }
 }
 
 void push(Node **headRef, int val) {
@@ -36,6 +107,7 @@ void push(Node **headRef, int val) {
   if(newNode) {
     printf("Type a number: ");
     scanf("%d", &val);
+    getchar();
 
     newNode->data = val;
     newNode->next = *headRef;
@@ -56,9 +128,6 @@ void pushAtEnd(Node **headRef, int val) {
   Node *newNode = malloc(sizeof(newNode));
 
   if(newNode) {
-    printf("Type a number: ");
-    scanf("%d", &val);
-
     newNode->data = val;
     newNode->next = NULL;
     newNode->previous = NULL;
@@ -84,6 +153,7 @@ void pushAtMiddle(Node **headRef, int val) {
   if(newNode) {
     printf("Type a number: ");
     scanf("%d", &val);
+    getchar();
 
     newNode->data = val;
     newNode->next = NULL;
@@ -107,6 +177,45 @@ void pushAtMiddle(Node **headRef, int val) {
       }
       head->next = newNode;
     }
+  }
+}
+
+void pushAtSpecificPos(Node **headRef, int val, int key) {
+  Node *newNode = (struct Node *) malloc(sizeof(struct Node));
+  int nodes = countNodes(*headRef);
+
+  if(newNode) {
+    printf("Type a number: ");
+    scanf("%d", &val);
+    getchar();
+    if(nodes > 1) {
+      printf("Type a number to insert after: ");
+      scanf("%d", &key);
+      getchar();
+    }
+
+    newNode->data = val;
+    newNode->next = NULL;
+    newNode->previous = NULL;
+
+    if(*headRef == NULL) {
+      *headRef = newNode;
+    } else {
+      Node *head = *headRef;
+
+      while(head->next && head->data != key) {
+        head = head->next;
+      }
+
+      newNode->next = head->next;
+      newNode->previous = head;
+      if(newNode->next) {
+        newNode->next->previous = newNode;
+      }
+      head->next = newNode;
+    }
+  } else {
+    printf("Memory allocation error...!");
   }
 }
 
@@ -174,21 +283,28 @@ Node* popAtSpecificPos(Node **headRef, int key) {
 }
 
 Node* popAll(Node **headRef) {
+  Node *rm = NULL;
+
   if(*headRef) {
+    Node *rm = *headRef;
     *headRef = NULL;
   } else {
     printf("Empty list.\n");
   }
+
+  return rm;
 }
 
 int main() {
   char *menu1 = "0 - Exit\n1 - Insert at begin\n2 - Remove at begin\n3 - show\n4 - Insert at end\n";
-  char *menu2 = "5 - Insert at middle\n6 - Remove at end\n7 - Remove specific\n8 - Clear list\n\n";
-  int choice, val;
+  char *menu2 = "5 - Insert at middle\n6 - Insert after specific position\n7 - Remove at end\n";
+  char *menu3 = "8 - Remove specific item\n9 - Clear list\n10 - To sort list\n11 - To reverse\n";
+  char *menu4 = "12 - swap position\n\n";
+  int choice, val, key;
   Node *remove, *list = NULL;
 
   do {
-    printf("%s%s", menu1, menu2);
+    printf("%s%s%s%s", menu1, menu2, menu3, menu4);
     scanf("%d", &choice);
     getchar();
 
@@ -200,6 +316,7 @@ int main() {
       case 2:
         remove = pop(&list);
         remove ? printf("%d Removed successfully!\n\n", remove->data) : printf("Nothing to remove.\n\n");
+        free(remove);
       break;
 
       case 3:
@@ -207,6 +324,9 @@ int main() {
       break;
 
       case 4:
+        printf("Type a number: ");
+        scanf("%d", &val);
+        getchar();
         pushAtEnd(&list, val);
       break;
 
@@ -215,22 +335,38 @@ int main() {
       break;
 
       case 6:
-        remove = popAtEnd(&list);
-        remove ? printf("%d Removed.\n\n", remove->data) : printf("Element does'nt exist.\n\n");
+        pushAtSpecificPos(&list, val, key);
       break;
 
       case 7:
-        remove = popAtSpecificPos(&list, val);
-        remove ? printf("%d Removed.\n\n", remove->data) : printf("Nothing to remove.\n\n");
+        remove = popAtEnd(&list);
+        remove ? printf("%d Removed.\n\n", remove->data) : printf("Element does'nt exist.\n\n");
+        free(remove);
       break;
 
       case 8:
+        remove = popAtSpecificPos(&list, val);
+        remove ? printf("%d Removed.\n\n", remove->data) : printf("Nothing to remove.\n\n");
+        free(remove);
+      break;
+
+      case 9:
         remove = popAll(&list);
         remove ? printf("List erased.\n\n") : printf("Nothing to remove.\n\n");
+        free(remove);
+      break;
+
+      case 10:
+        list = insertionSort(&list);
+      break;
+
+      case 11:
+        list = listReverter(&list);
+        list ? printf("Your list was reversed.\n\n") : printf("Not enough items.\n\n");
       break;
 
       default:
-        !choice ? printf("Wrong choice.") : printf("Good bye!!!");
+        !choice ? printf("Wrong choice.") : printf("All good!");
     }
   }while(choice != 0);
   
