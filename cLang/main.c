@@ -5,15 +5,14 @@
 #include "practice.c"
 
 int main() {
-  char *menu1 = "0 - Exit\n1 - Insert at begin\n2 - Remove at begin\n3 - show\n4 - Insert at end\n";
-  char *menu2 = "5 - Insert at middle\n6 - Insert after specific position\n7 - Remove at end\n";
-  char *menu3 = "8 - Remove specific item\n9 - Clear list\n10 - To sort list\n11 - To reverse\n";
-  char *menu4 = "12 - swap position\n\n";
   int choice, val, key;
+  char *m = "0 - Exit\n1 - Insert at begin\n2 - Insert at end\n3 - Show List\n4 - Insert at middle\n";
+  char *m2 = "5 - Insert at specific position\n6 - Remove at begin\n7 - Remove at end\n";
+  char *m3 = "8 - Remove specific element\n9 - Swap elements\n\n";
   Node *remove, *list = NULL;
 
   do {
-    printf("%s%s%s%s", menu1, menu2, menu3, menu4);
+    printf("%s%s%s", m, m2, m3);
     scanf("%d", &choice);
     getchar();
 
@@ -23,61 +22,46 @@ int main() {
       break;
 
       case 2:
-        remove = pop(&list);
-        remove ? printf("%d Removed successfully!\n\n", remove->data) : printf("Nothing to remove.\n\n");
-        free(remove);
+        pushAtEnd(&list, val); 
       break;
 
       case 3:
-        showList(list);
+        printList(list);
       break;
 
       case 4:
-        printf("Type a number: ");
-        scanf("%d", &val);
-        getchar();
-        pushAtEnd(&list, val);
-      break;
-
-      case 5:
         pushAtMiddle(&list, val);
       break;
 
-      case 6:
+      case 5:
         pushAtSpecificPos(&list, val, key);
+      break;
+
+      case 6:
+        remove = pop(&list);
+        remove ? printf("%d removed.\n\n", remove->data) : printf("Nothing to remove.\n\n");
+        free(remove);
       break;
 
       case 7:
         remove = popAtEnd(&list);
-        remove ? printf("%d Removed.\n\n", remove->data) : printf("Element does'nt exist.\n\n");
+        remove ? printf("%d removed.\n\n", remove->data) : printf("Nothing to remove.\n\n");
         free(remove);
       break;
 
       case 8:
         remove = popAtSpecificPos(&list, val);
-        remove ? printf("%d Removed.\n\n", remove->data) : printf("Nothing to remove.\n\n");
-        free(remove);
+        remove ? printf("%d removed.\n\n", remove->data) : printf("Nothing to remove.\n\n");
       break;
 
       case 9:
-        remove = popAll(&list);
-        remove ? printf("List erased.\n\n") : printf("Nothing to remove.\n\n");
-        free(remove);
-      break;
-
-      case 10:
-        list = insertionSort(&list);
-      break;
-
-      case 11:
-        list = listReverter(&list);
-        list ? printf("Your list was reversed.\n\n") : printf("Not enough items.\n\n");
+        swapper(&list, val, key);
       break;
 
       default:
-        !choice ? printf("Wrong choice.") : printf("All good!");
+        choice != 0 ? printf("All good!\n\n") : printf("Invalid choice.\n\n");
+      break;
     }
-  }while(choice != 0);
-  
+  } while(choice != 0);
   return 0;
 }

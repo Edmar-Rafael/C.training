@@ -20,6 +20,87 @@ int countNodes(Node *headRef) {
   return count;
 }
 
+void swapper(Node **headRef, int key1, int key2) {
+  Node *head = *headRef;
+
+  if(head) {
+    printf("Type the fist node to swap: ");
+    scanf("%d", &key1);
+    printf("Type the second node to swap: ");
+    scanf("%d", &key2);
+
+    if(head->next == NULL || key1 == key2) {
+      printf("Not enough elements.\n\n");
+      return;
+    }
+
+    Node *currentKey1 = NULL;
+    Node *currentKey2 = NULL;
+    Node *aux;
+
+    while(head) {
+      if(head->data == key1) {
+        currentKey1 = head;
+        break;
+      }
+
+      head = head->next;
+    }
+
+    head = *headRef;
+
+    while(head) {
+      if(head->data == key2) {
+        currentKey2 = head;
+        break;
+      }
+
+      head = head->next;
+    }
+
+    if(currentKey1 == NULL || currentKey2 == NULL) {
+      printf("\nSome value does'nt exist.\n\n");
+      return;
+    }
+
+    if(currentKey1->previous) {
+      currentKey1->previous->next = currentKey2;
+    } else {
+      *headRef = currentKey2;
+    }
+
+    if(currentKey2->previous) {
+      currentKey2->previous->next = currentKey1;
+    } else {
+      *headRef = currentKey1;
+    }
+
+    aux = currentKey1->next;
+    currentKey1->next = currentKey2->next;
+    currentKey2->next = aux;
+
+    if(currentKey1->next) {
+      currentKey1->next->previous = currentKey1;
+    }
+    if(currentKey2->next) {
+      currentKey2->next->previous = currentKey2;
+    }
+
+    aux = currentKey1->previous;
+    currentKey1->previous = currentKey2->previous;
+    currentKey2->previous = aux;
+
+    if(currentKey1->previous) {
+      currentKey1->previous->next = currentKey1;
+    }
+    if(currentKey2->previous) {
+      currentKey2->previous->next = currentKey2;
+    }
+  } else {
+    printf("Empty list.\n\n");
+  }
+}
+
 void showList(Node *headRef) {
   printf("\n-----------List-----------\n");
   printf("Nodes: %d\n", countNodes(headRef));
@@ -279,6 +360,9 @@ Node* popAtSpecificPos(Node **headRef, int key) {
     head->previous->next = rm->next;
 
     return rm;
+  } else {
+    printf("Element does'nt exist.\n");
+    return NULL;
   }
 }
 
@@ -363,6 +447,10 @@ int main() {
       case 11:
         list = listReverter(&list);
         list ? printf("Your list was reversed.\n\n") : printf("Not enough items.\n\n");
+      break;
+
+      case 12:
+        swapper(&list, val, key);
       break;
 
       default:
