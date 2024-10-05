@@ -75,27 +75,13 @@ void swapper(Node **headRef, int key1, int key2) {
       *headRef = currentKey1;
     }
 
-    aux = currentKey1->next;
-    currentKey1->next = currentKey2->next;
-    currentKey2->next = aux;
+    aux = currentKey2->next;
+    currentKey2->next = currentKey1->next;
+    currentKey1->next = aux;
 
-    if(currentKey1->next) {
-      currentKey1->next->previous = currentKey1;
-    }
-    if(currentKey2->next) {
-      currentKey2->next->previous = currentKey2;
-    }
-
-    aux = currentKey1->previous;
-    currentKey1->previous = currentKey2->previous;
-    currentKey2->previous = aux;
-
-    if(currentKey1->previous) {
-      currentKey1->previous->next = currentKey1;
-    }
-    if(currentKey2->previous) {
-      currentKey2->previous->next = currentKey2;
-    }
+    aux = currentKey2->previous;
+    currentKey2->previous = currentKey1->previous;
+    currentKey1->previous = aux;
   } else {
     printf("Empty list.\n\n");
   }
