@@ -24,13 +24,13 @@ void swapper(Node **headRef, int key1, int key2) {
   Node *head = *headRef;
 
   if(head) {
-    printf("Type the fist node to swap: ");
+    printf("Type the first node to swap: ");
     scanf("%d", &key1);
     printf("Type the second node to swap: ");
     scanf("%d", &key2);
 
     if(head->next == NULL || key1 == key2) {
-      printf("Not enough elements or, invalid entry.\n\n");
+      printf("Not enough elements.\n\n");
       return;
     }
 
@@ -41,18 +41,10 @@ void swapper(Node **headRef, int key1, int key2) {
     while(head) {
       if(head->data == key1) {
         currentKey1 = head;
-        break;
       }
 
-      head = head->next;
-    }
-
-    head = *headRef;
-
-    while(head) {
       if(head->data == key2) {
         currentKey2 = head;
-        break;
       }
 
       head = head->next;
@@ -82,6 +74,20 @@ void swapper(Node **headRef, int key1, int key2) {
     aux = currentKey2->previous;
     currentKey2->previous = currentKey1->previous;
     currentKey1->previous = aux;
+
+    if(currentKey1->previous == currentKey1) {
+      currentKey1->previous = currentKey2;
+    }
+    if(currentKey2->previous == currentKey2) {
+      currentKey2->previous = currentKey1;
+    }
+
+    if(currentKey1->next) {
+      currentKey1->next->previous == currentKey1;
+    }
+    if(currentKey2->next) {
+      currentKey2->next->previous = currentKey2;
+    }
   } else {
     printf("Empty list.\n\n");
   }
