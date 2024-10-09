@@ -9,12 +9,12 @@ typedef struct Node {
   struct Node *previous;
 } Node;
 
-int countNodes(Node *headRef) {
+int countNodes(Node *head) {
   int count = 0;
 
-  while(headRef) {
+  while(head) {
+    head = head->next;
     count++;
-    headRef = headRef->next;
   }
 
   return count;
@@ -93,94 +93,12 @@ void swapper(Node **headRef, int key1, int key2) {
   }
 }
 
-void showList(Node *headRef) {
-  printf("\n-----------List-----------\n");
-  printf("Nodes: %d\n", countNodes(headRef));
-
-  while(headRef) {
-    printf("%d <-> ", headRef->data);
-    headRef = headRef->next;
-  }
-
-  printf("\n-------End of list--------\n\n");
-}
-
-Node* insertionSort(Node **headRef) {
-  if(*headRef == NULL) {
-    return *headRef;
-  }
-  
-  Node *current = *headRef;
-  Node *sorted = NULL;
-
-  while(current) {
-    Node *next = current->next;
-
-    if(sorted == NULL || sorted->data >= current->data) {
-      current->next = sorted;
-
-      if(sorted) {
-        sorted->previous = current;
-      }
-
-      sorted = current;
-      sorted->previous = NULL;
-    } else {
-      Node *currentSorted = sorted;
-
-      while(currentSorted->next && currentSorted->next->data < current->data) {
-        currentSorted = currentSorted->next;
-      }
-
-      current->next = currentSorted->next;
-
-      if(currentSorted->next) {
-        currentSorted->next->previous = current;
-      }
-
-      currentSorted->next = current;
-      current->previous = currentSorted;
-    }
-
-    current = next;
-  }
-
-  return sorted;
-}
-
-Node* listReverter(Node **headRef) {
-  Node *head = *headRef;
-  int nodes = countNodes(head);
-
-  if(head == NULL) {
-    return *headRef;
-  }
-
-  if(nodes > 1) {
-    Node *prev;
-
-    while(head) {
-      prev = head->previous;
-      head->previous = head->next;
-      head->next = prev;
-      head = head->previous;
-    }
-
-    if(prev) {
-      *headRef = prev->previous;
-    }
-
-    return *headRef;
-  }
-}
-
 void push(Node **headRef, int val) {
   Node *newNode = (struct Node *) malloc(sizeof(struct Node));
 
   if(newNode) {
-    printf("Type a number: ");
+    printf("Type a number to insert: ");
     scanf("%d", &val);
-    getchar();
 
     newNode->data = val;
     newNode->next = *headRef;
@@ -193,14 +111,17 @@ void push(Node **headRef, int val) {
 
     *headRef = newNode;
   } else {
-    printf("Memory allocation error...!");
+    printf("Memory allocation error!");
   }
 }
 
-void pushAtEnd(Node **headRef, int val) {
-  Node *newNode = malloc(sizeof(newNode));
+void pushAtEnd(Node **headRef,int val) {
+  Node *newNode = (struct Node *) malloc(sizeof(struct Node));
 
   if(newNode) {
+    printf("Type a number: ");
+    scanf("%d", &val);
+
     newNode->data = val;
     newNode->next = NULL;
     newNode->previous = NULL;
@@ -214,8 +135,8 @@ void pushAtEnd(Node **headRef, int val) {
         head = head->next;
       }
 
-      newNode->previous = head;
       head->next = newNode;
+      newNode->previous = head;
     }
   }
 }
@@ -226,7 +147,6 @@ void pushAtMiddle(Node **headRef, int val) {
   if(newNode) {
     printf("Type a number: ");
     scanf("%d", &val);
-    getchar();
 
     newNode->data = val;
     newNode->next = NULL;
@@ -236,11 +156,11 @@ void pushAtMiddle(Node **headRef, int val) {
       *headRef = newNode;
     } else {
       Node *head = *headRef;
-      int nodes = countNodes(head) / 2;
+      int halfNodes = countNodes(head) / 2;
 
-      while(nodes > 1) {
+      while(halfNodes > 1) {
         head = head->next;
-        nodes--;
+        halfNodes--;
       }
 
       newNode->next = head->next;
@@ -258,19 +178,17 @@ void pushAtSpecificPos(Node **headRef, int val, int key) {
   int nodes = countNodes(*headRef);
 
   if(newNode) {
-    printf("Type a number: ");
+    printf("Type a number to insert: ");
     scanf("%d", &val);
-    getchar();
     if(nodes > 1) {
       printf("Type a number to insert after: ");
       scanf("%d", &key);
-      getchar();
     }
 
     newNode->data = val;
     newNode->next = NULL;
     newNode->previous = NULL;
-
+    
     if(*headRef == NULL) {
       *headRef = newNode;
     } else {
@@ -292,11 +210,40 @@ void pushAtSpecificPos(Node **headRef, int val, int key) {
   }
 }
 
+void printList(Node *head) {
+  int nodes = countNodes(head);
+  printf("\n----------------< List >------------------\n");
+  printf("Nodes: %d\n\n", nodes);
+
+  while(head) {
+    if(head->previous) {
+      printf("previous: %d\n", head->previous->data);
+    }else {
+      printf("previous: %p\n", head->previous);
+    }
+
+    printf("head: %d <-> ", head->data);
+
+    if(head->next) {
+      printf("\nnext: %d\n\n", head->next->data);
+    } else {
+      printf("\nnext: %p\n\n", head->next);
+    }
+
+    head = head->next;
+  }
+
+  printf("-------------< End of List >--------------\n\n");
+}
+
 Node* pop(Node **headRef) {
   if(*headRef) {
     Node *rm = *headRef;
     *headRef = rm->next;
-    rm->previous = NULL;
+    if(rm->next) {
+      rm->next->previous = NULL;
+    }
+
     return rm;
   }
 
@@ -305,10 +252,9 @@ Node* pop(Node **headRef) {
 }
 
 Node* popAtEnd(Node **headRef) {
-  Node *head = *headRef;
-
-  if(head) {
-    Node *rm = NULL;
+  if(*headRef) {
+    Node *head = *headRef;
+    Node *rm;
 
     if(head->next == NULL) {
       rm = *headRef;
@@ -329,46 +275,34 @@ Node* popAtEnd(Node **headRef) {
   return NULL;
 }
 
-Node* popAtSpecificPos(Node **headRef, int key) {
-  Node *head = *headRef;
+Node* popAtSpecificPos(Node **headRef, int val) {
+  if(*headRef) {
+    Node *head = *headRef;
+    Node *rm;
 
-  if(head) {
-    Node *rm = NULL;
+    printf("Type a number to remove: ");
+    scanf("%d", &val);
 
-    printf("Choose an item to remove: ");
-    scanf("%d", &key);
-
-    if(head->data == key) {
+    if(head->data == val) {
       rm = *headRef;
       *headRef = rm->next;
       return rm;
     }
-    
-    while(head->data != key) {
+
+    while(head->next && head->data != val) {
       head = head->next;
     }
-  
-    rm = head;
-    head->previous->next = rm->next;
 
-    return rm;
+    if(head) {
+      rm = head;
+      head->previous->next = rm->next;
+      rm->next->previous = head->previous;
+      return rm;
+    }
   } else {
     printf("Element does'nt exist.\n");
     return NULL;
   }
-}
-
-Node* popAll(Node **headRef) {
-  Node *rm = NULL;
-
-  if(*headRef) {
-    Node *rm = *headRef;
-    *headRef = NULL;
-  } else {
-    printf("Empty list.\n");
-  }
-
-  return rm;
 }
 
 int main() {

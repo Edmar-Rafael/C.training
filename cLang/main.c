@@ -59,7 +59,7 @@ int main() {
       break;
 
       default:
-        choice != 0 ? printf("All good!\n\n") : printf("Invalid choice.\n\n");
+        choice != 0 ? printf("Invalid choice!\n\n") : printf("All good.\n\n");
       break;
     }
   } while(choice != 0);
