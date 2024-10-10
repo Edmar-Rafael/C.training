@@ -55,21 +55,28 @@ void swapper(Node **headRef, int key1, int key2) {
       return;
     }
 
-    if(currentKey1->previous) {
-      currentKey1->previous->next = currentKey2;
-    } else {
-      *headRef = currentKey2;
-    }
-
     if(currentKey2->previous) {
       currentKey2->previous->next = currentKey1;
     } else {
       *headRef = currentKey1;
     }
 
+    if(currentKey1->previous) {
+      currentKey1->previous->next = currentKey2;
+    } else {
+      *headRef = currentKey2;
+    }
+
     aux = currentKey2->next;
     currentKey2->next = currentKey1->next;
     currentKey1->next = aux;
+
+    if(currentKey1->next) {
+      currentKey1->next->previous == currentKey1;
+    }
+    if(currentKey2->next) {
+      currentKey2->next->previous = currentKey2;
+    }
 
     aux = currentKey2->previous;
     currentKey2->previous = currentKey1->previous;
@@ -81,16 +88,66 @@ void swapper(Node **headRef, int key1, int key2) {
     if(currentKey2->previous == currentKey2) {
       currentKey2->previous = currentKey1;
     }
-
-    if(currentKey1->next) {
-      currentKey1->next->previous == currentKey1;
-    }
-    if(currentKey2->next) {
-      currentKey2->next->previous = currentKey2;
-    }
   } else {
     printf("Empty list.\n\n");
   }
+}
+
+Node* insertionSort(Node *head) {
+  if(head) {
+    Node *sorted = NULL;
+    Node *current = head;
+
+    while(current) {
+      Node *next = current->next;
+
+      if(sorted == NULL || sorted->data >= current->data) {
+        current->next = sorted;
+
+        if(sorted) {
+          sorted->previous = current;
+        }
+
+        sorted = current;
+        sorted->previous = NULL;
+      } else {
+        Node *currentSorted = sorted;
+
+        while(currentSorted->next && currentSorted->next->data < current->data) {
+          currentSorted = currentSorted->next;
+        }
+
+        current->next = currentSorted->next;
+
+        if(currentSorted->next) {
+          currentSorted->next->previous = current;
+        }
+
+        currentSorted->next = current;
+        current->previous = currentSorted;
+      }
+
+      current = next;
+    }
+
+    return sorted;
+  }
+}
+
+Node* reverse(Node *head) {
+  if(head == NULL) {
+    return NULL;
+  }
+
+  Node *aux = head->previous;
+  head->previous = head->next;
+  head->next = aux;
+
+  if(head->previous == NULL) {
+    return head;
+  }
+
+  return reverse(head->previous);
 }
 
 void push(Node **headRef, int val) {
@@ -371,7 +428,7 @@ int main() {
       break;
 
       case 11:
-        list = listReverter(&list);
+        list = reverse(&list);
         list ? printf("Your list was reversed.\n\n") : printf("Not enough items.\n\n");
       break;
 

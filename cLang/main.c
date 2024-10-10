@@ -8,11 +8,12 @@ int main() {
   int choice, val, key;
   char *m = "0 - Exit\n1 - Insert at begin\n2 - Insert at end\n3 - Show List\n4 - Insert at middle\n";
   char *m2 = "5 - Insert at specific position\n6 - Remove at begin\n7 - Remove at end\n";
-  char *m3 = "8 - Remove specific element\n9 - Swap elements\n\n";
+  char *m3 = "8 - Remove specific element\n9 - Clear list\n10 - Swap elements\n11 - sort\n";
+  char *m4 = "12 - reverse list.\n\n";
   Node *remove, *list = NULL;
 
   do {
-    printf("%s%s%s", m, m2, m3);
+    printf("%s%s%s%s", m, m2, m3, m4);
     scanf("%d", &choice);
     getchar();
 
@@ -55,7 +56,21 @@ int main() {
       break;
 
       case 9:
+        remove = popAll(&list);
+        remove ? printf("List was erased.\n\n") : printf("Nothing to remove.\n\n");
+      break;
+
+      case 10:
         swapper(&list, val, key);
+      break;
+
+      case 11:
+        list = insertionSort(list);
+      break;
+
+      case 12:
+        list = reverse(list);
+        list ? printf("List was reversed.\n\n") : printf("Erro...!");
       break;
 
       default:
