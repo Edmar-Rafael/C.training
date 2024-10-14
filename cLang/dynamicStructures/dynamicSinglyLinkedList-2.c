@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include "mergeSort.c"
 
-/* typedef struct Node {
+typedef struct Node {
   int data;
   struct Node *next;
-} Node; */
+} Node;
 
 typedef struct List {
   int length;

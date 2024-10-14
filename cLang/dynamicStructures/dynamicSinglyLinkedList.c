@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "mergeSort.c"
-
+#include "../mergeSort.c"
 
 int countNodes(Node *head) {
   int count = 0;
@@ -133,7 +132,7 @@ void listSort(Node **list) {
   if(*list) {
     mergeSort(list);
   } else {
-    printf("List contains only one element or, its empty.\n\n");
+    printf("Not enough elements.\n\n");
   }
 }
 
