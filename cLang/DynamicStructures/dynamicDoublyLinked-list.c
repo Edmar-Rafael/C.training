@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "practice.c"
+
 
 typedef struct Node {
   int data;
@@ -55,38 +55,31 @@ void swapper(Node **headRef, int key1, int key2) {
       return;
     }
 
-    if(currentKey2->previous) {
-      currentKey2->previous->next = currentKey1;
-    } else {
-      *headRef = currentKey1;
-    }
-
     if(currentKey1->previous) {
       currentKey1->previous->next = currentKey2;
     } else {
       *headRef = currentKey2;
     }
 
-    aux = currentKey2->next;
-    currentKey2->next = currentKey1->next;
-    currentKey1->next = aux;
-
-    if(currentKey1->next) {
-      currentKey1->next->previous == currentKey1;
-    }
-    if(currentKey2->next) {
-      currentKey2->next->previous = currentKey2;
+    if(currentKey2->previous) {
+      currentKey2->previous->next = currentKey1;
+    } else {
+      *headRef = currentKey1;
     }
 
     aux = currentKey2->previous;
     currentKey2->previous = currentKey1->previous;
     currentKey1->previous = aux;
 
-    if(currentKey1->previous == currentKey1) {
-      currentKey1->previous = currentKey2;
+    aux = currentKey2->next;
+    currentKey2->next = currentKey1->next;
+    currentKey1->next = aux;
+
+    if(currentKey1->next) {
+      currentKey1->next->previous = currentKey1;
     }
-    if(currentKey2->previous == currentKey2) {
-      currentKey2->previous = currentKey1;
+    if(currentKey2->next) {
+      currentKey2->next->previous = currentKey2;
     }
   } else {
     printf("Empty list.\n\n");
@@ -267,7 +260,7 @@ void pushAtSpecificPos(Node **headRef, int val, int key) {
   }
 }
 
-void printList(Node *head) {
+void showList(Node *head) {
   int nodes = countNodes(head);
   printf("\n----------------< List >------------------\n");
   printf("Nodes: %d\n\n", nodes);
@@ -362,6 +355,17 @@ Node* popAtSpecificPos(Node **headRef, int val) {
   }
 }
 
+Node* popAll(Node **headRef) {
+  if(*headRef) {
+    Node *rm = *headRef;
+    *headRef = NULL;
+    return rm;
+  }
+
+  printf("Empty list.\n\n");
+  return NULL;
+}
+
 int main() {
   char *menu1 = "0 - Exit\n1 - Insert at begin\n2 - Remove at begin\n3 - show\n4 - Insert at end\n";
   char *menu2 = "5 - Insert at middle\n6 - Insert after specific position\n7 - Remove at end\n";
@@ -419,16 +423,19 @@ int main() {
 
       case 9:
         remove = popAll(&list);
-        remove ? printf("List erased.\n\n") : printf("Nothing to remove.\n\n");
+        if(remove) {
+          printf("List erased: ");
+          showList(remove);
+        }
         free(remove);
       break;
 
       case 10:
-        list = insertionSort(&list);
+        list = insertionSort(list);
       break;
 
       case 11:
-        list = reverse(&list);
+        list = reverse(list);
         list ? printf("Your list was reversed.\n\n") : printf("Not enough items.\n\n");
       break;
 

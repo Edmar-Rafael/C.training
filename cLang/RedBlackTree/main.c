@@ -106,48 +106,48 @@ main() {
     scanf("%d", &j);
 
     switch (j) {
-    case 1:
-      printf("\n Enter the data to be Inserted: ");
-      scanf("%d", &x);
-      printf("\n____________________Inserting____________________\n\n");
-      rbtree_insert(t, (void*) x, compare_int);
+      case 1:
+        printf("\n Enter the data to be Inserted: ");
+        scanf("%d", &x);
+        printf("\n____________________Inserting____________________\n\n");
+        rbtree_insert(t, (void*) x, compare_int);
       break;
 
-    case 2:
-      printf("\n Enter the data to be Deleted: ");
-      scanf("%d", &x);
-      rbtree_delete(t, (void*) x, compare_int);
+      case 2:
+        printf("\n Enter the data to be Deleted: ");
+        scanf("%d", &x);
+        rbtree_delete(t, (void*) x, compare_int);
       break;
 
-    case 3:
-      print_tree(t);
+      case 3:
+        print_tree(t);
       break;
 
-    case 4:
-      printf("\n");
-      preorder(t->root);
-      printf("\n");
+      case 4:
+        printf("\n");
+        preorder(t->root);
+        printf("\n");
       break;
 
-    case 5:
-      printf("\n");
-      postorder(t->root);
-      printf("\n");
+      case 5:
+        printf("\n");
+        postorder(t->root);
+        printf("\n");
       break;
 
-    case 6:
-      printf("\n");
-      postorder(t->root);
-      printf("\n");
+      case 6:
+        printf("\n");
+        postorder(t->root);
+        printf("\n");
       break;
 
-    case 7:
-      printf("\n Exiting........");
-      exit(1);
+      case 7:
+        printf("\n Exiting........");
+        exit(1);
       break;
 
-    default:
-      printf("Please Enter a valid number!! \n");
+      default:
+        printf("Please Enter a valid number!! \n");
       break;
     }
   }

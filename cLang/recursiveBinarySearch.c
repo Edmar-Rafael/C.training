@@ -21,7 +21,7 @@ void handleIndex(int arr[], int length) {
     int result = recursiveBinarySearch(arr, valor, 0, length - 1);
 
     if(result != -1) {
-      printf("\nValor finded at index: %d \n\n", result);
+      printf("\nValor found at index: %d \n\n", result);
       printf("\n");
     } else {
       printf("\nValor doesnt exist. \n");
@@ -35,10 +35,8 @@ void handleIndex(int arr[], int length) {
 }
 
 int recursiveBinarySearch(int arr[], int key, int start, int end) {
-  int half;
-
   if(start <= end) {
-    half = (start + end) / 2;
+    int half = (start + end) / 2;
 
     if(key == arr[half]) {
       return half;
