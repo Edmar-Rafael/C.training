@@ -67,13 +67,13 @@ void swapper(Node **headRef, int key1, int key2) {
       *headRef = currentKey1;
     }
 
-    aux = currentKey2->previous;
-    currentKey2->previous = currentKey1->previous;
-    currentKey1->previous = aux;
+    aux = currentKey1->next;
+    currentKey1->next = currentKey2->next;
+    currentKey2->next = aux;
 
-    aux = currentKey2->next;
-    currentKey2->next = currentKey1->next;
-    currentKey1->next = aux;
+    aux = currentKey1->previous;
+    currentKey1->previous = currentKey2->previous;
+    currentKey2->previous = aux;
 
     if(currentKey1->next) {
       currentKey1->next->previous = currentKey1;
