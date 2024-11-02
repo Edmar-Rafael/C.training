@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define SIZE 31
+
+#define LENGTH 31
 
 typedef struct Node {
   int key;
@@ -12,26 +13,27 @@ typedef struct List {
   Node *head;
 } List;
 
-void listInit(List *l) {
-  l->length = 0;
-  l->head = NULL;
+
+void listInit(List *t) {
+  t->head = NULL;
+  t->length = 0;
 }
 
-void push(List *l, int val) {
+void push(List *t, int val) {
   Node *newNode = (struct Node *) malloc(sizeof(struct Node));
 
   if(newNode) {
     newNode->key = val;
-    newNode->next = l->head;
-    l->head = newNode;
-    l->length++;
+    newNode->next = t->head;
+    t->head = newNode;
+    t->length++;
   } else {
     printf("Memory allocation error...!");
   }
 }
 
-int listSearch(List *l, int val) {
-  Node *head = l->head;
+int listSearch(List *t, int val) {
+  Node *head = t->head;
 
   while(head && head->key != val) {
     head = head->next;
@@ -44,28 +46,28 @@ int listSearch(List *l, int val) {
   return 0;
 }
 
-void listPrint(List *l) {
-  Node *head = l->head;
-  printf("  Size: %d: ", l->length);
+void listPrint(List *t) {
+  Node *head = t->head;
 
+  printf(" Length: %d -> ", t->length);
   while(head) {
-    printf("%d -> ", head->key);
+    printf("%d-> ", head->key);
     head = head->next;
   }
 }
 
+int hash(int key) {
+  return key % LENGTH;
+}
+
 void tableInit(List t[]) {
-  for(int i = 0; i < SIZE; i++) {
+  for(int i = 0; i < LENGTH; i++) {
     listInit(&t[i]);
   }
 }
 
-int hash(int key) {
-  return key % SIZE;
-}
-
 void insert(List t[], int val) {
-  printf("Type a number to insert: ");
+  printf("Type a number: ");
   scanf("%d", &val);
 
   int id = hash(val);
@@ -73,20 +75,21 @@ void insert(List t[], int val) {
   push(&t[id], val);
 }
 
-int search(List t[], int key) {
-  printf("Type a number to search: ");
-  scanf("%d", &key);
+int search(List t[], int val) {
+  printf("\tType a number to search: ");
+  scanf("%d", &val);
 
-  int id = hash(key);
-  printf("\tindex: %d\n", id);
+  int id = hash(val);
 
-  int el = listSearch(&t[id], key);
+  printf("Index: %d\n", id);
+
+  int el = listSearch(&t[id], val);
 
   return el;
 }
 
 void tablePrint(List t[]) {
-  for(int i = 0; i < SIZE; i++) {
+  for(int i = 0; i < LENGTH; i++) {
     printf("%2d = ", i);
     listPrint(&t[i]);
     printf("\n");
@@ -96,12 +99,12 @@ void tablePrint(List t[]) {
 
 int main() {
   int choice, val;
-  List table[SIZE];
+  List table[LENGTH];
 
   tableInit(table);
-  
+
   do {
-    printf("\t0 - Exit\n\t1 - Insert\n\t2 - Search\n\t3 - Print\n\t4 - Show List\n\n\t");
+    printf("\t0 - Exit\n\t1 - Insert\n\t2 - Search\n\t3 - Show table\n\t");
     scanf("%d", &choice);
     getchar();
 
@@ -112,17 +115,17 @@ int main() {
 
       case 2:
         val = search(table, val);
-        val != 0 ? printf("%d found.\n\n", val) : printf("(x) element not found.\n\n");
+        val ? printf("{%d} found.\n\n", val) : printf("(x) Not found {%d}.\n\n", val);
       break;
 
       case 3:
-        tablePrint(table); 
+        tablePrint(table);
       break;
 
       default:
-        choice != 0 ? printf("Wrong choice.\n\n") : printf("All good.\n\n");
+        choice != 0 ? printf("Wrong choice.\n\n") : printf("Bye bye!!!\n\n");
     }
-  }while(choice != 0);
+  } while(choice != 0);
 
   return 0;
 }
