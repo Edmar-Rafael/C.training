@@ -4,7 +4,8 @@
 #include <inttypes.h>
 #include "practice.c"
 
-int main() {
 
+int main() {
+  
   return 0;
 }
