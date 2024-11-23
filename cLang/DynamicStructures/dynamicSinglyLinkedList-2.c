@@ -17,26 +17,23 @@ void createList(List *list) {
   list->head = NULL;
 }
 
-void listInverter(List *list) {
-  if(list->head && list->length >= 2) {
-    int i, *arr;
-    int length = list->length;
-    Node *head = list->head;
+Node* listInverter(List *list) {
+  Node *current = list->head;
+  Node *invertedList = NULL;
 
-    for(i = 0; i < length; i++) {
-      arr[i] = head->data;
-      head = head->next;
+  if(current && list->length > 1) {
+    while(current) {
+      Node *next = current->next;
+      current->next = invertedList;
+      invertedList = current;
+      current = next;
     }
 
-    list->head = NULL;
-    list->length = 0;
-
-    for(i = 0; i < length; i++) {
-      insertAtBegin(list, arr[i]);
-    }
-  } else {
-    printf("Not enough elements.\n\n");
+    return invertedList;
   }
+
+  printf("Not enough elements.\n\n");
+  return NULL;
 }
 
 void changePlace(List *list, int key1, int key2) {

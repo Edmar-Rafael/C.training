@@ -13,39 +13,41 @@ typedef struct List {
   Node *head;
 } List;
 
-
 void listInit(List *t) {
-  t->length = 0;
   t->head = NULL;
+  t->length = 0;
 }
 
-void push(List *t, int val) {
+void pushInorder(List *t, int val) {
   Node *newNode = (struct Node *) malloc(sizeof(struct Node));
 
   if(newNode) {
     newNode->key = val;
     newNode->next = NULL;
-    
+
     if(!t->head || val < t->head->key) {
       newNode->next = t->head;
       t->head = newNode;
     } else {
       Node *head = t->head;
+      Node *prev = head;
 
-      while(head->next && head->key < val) {
+      while(head->next && val < head->key) {
+        prev = head;
         head = head->next;
       }
 
-      head->next = newNode;
+      newNode->next = prev->next;
+      prev->next = newNode;
     }
 
     t->length++;
   } else {
-    printf("Memory allocation error...!");
+    printf("Memory allocation error!!!\n\n");
   }
 }
 
-int popAtSpecific(List *t, int val) {
+int popAtSpecificPos(List *t, int val) {
   Node *head = t->head;
 
   if(head) {
@@ -64,7 +66,7 @@ int popAtSpecific(List *t, int val) {
     }
 
     if(!head->next && head->key != val) {
-      printf("Element does'nt exist.");
+      printf("Element does'nt exist.\n");
       return 0;
     }
 
@@ -74,28 +76,28 @@ int popAtSpecific(List *t, int val) {
     return rm->key;
   }
 
-  printf("Empty list.\n\n");
+  printf("Empty list.\n");
   return 0;
+}
+
+void listPrint(List *t) {
+  Node *head = t->head;
+
+  printf("Length: %d-> ", t->length);
+  while(head) {
+    printf("-> %d", head->key);
+    head = head->next;
+  }
 }
 
 int listSearch(List *t, int val) {
   Node *head = t->head;
-  
+
   while(head && head->key != val) {
     head = head->next;
   }
 
   return head ? head->key : 0;
-}
-
-void listPrint(List *t) {
-  Node *aux = t->head;
-
-  printf(" Length: %d-> ", t->length);
-  while(aux) {
-    printf("%d-> ", aux->key);
-    aux = aux->next;
-  }
 }
 
 void tableInit(List t[]) {
@@ -109,32 +111,23 @@ int hash(int key) {
 }
 
 void insert(List t[], int val) {
-  printf("Type a number: ");
+  printf("Type a number to insert: ");
   scanf("%d", &val);
 
   int id = hash(val);
 
-  push(&t[id], val);
+  pushInorder(&t[id], val);
 }
 
-int toRemove(List t[], int val) {
-  printf("Type a number to remove: ");
+int delete(List t[], int val) {
+  printf("Type a number to delete: ");
   scanf("%d", &val);
 
   int id = hash(val);
-  printf("Index: %d\t", id);
 
-  return popAtSpecific(&t[id], val);
-}
+  int el = popAtSpecificPos(&t[id], val);
 
-int search(List t[], int val) {
-  printf("Type a number to search: ");
-  scanf("%d", &val);
-
-  int id = hash(val);
-  printf("Index: %d\t", id);
-
-  return listSearch(&t[id], val);;
+  return el;
 }
 
 void tablePrint(List t[]) {
@@ -146,14 +139,24 @@ void tablePrint(List t[]) {
   printf("\n");
 }
 
+int search(List t[], int key) {
+  printf("Type a number to search: ");
+  scanf("%d", &key);
+
+  int id = hash(key);
+
+  return listSearch(&t[id], key);
+}
+
+
 int main() {
   int choice, val;
-  List table[LENGTH];
+  List table[15];
 
   tableInit(table);
 
   do {
-    printf("\t0 - Exit\n\t1 - Insert\n\t2 - Search\n\t3 - Show table\n\t4 - Remove\n\t");
+    printf("\t0 - Exit\n\t1 - Insert\n\t2 - Delete\n\t3 - Show table\n\t4 - Search\n\n");
     scanf("%d", &choice);
     getchar();
 
@@ -163,8 +166,8 @@ int main() {
       break;
 
       case 2:
-        val = search(table, val);
-        val ? printf("%d found.\n\n", val) : printf("Not found.\n\n");
+        val = delete(table, val);
+        val ? printf("%d deleted.\n\n", val) : printf("Element not found.\n\n");
       break;
 
       case 3:
@@ -172,15 +175,14 @@ int main() {
       break;
 
       case 4:
-        val = toRemove(table, val);
-        val ? printf("Node %d removed.\n\n", val) : printf("Node not found\n\n");
+        val = search(table, val);
+        val ? printf("%d found,\n\n", val) : printf("Element not found\n\n");
       break;
 
       default:
-        choice != 0 ? printf("Wrong choice!\n\n") : printf("Bye Bye!!!");
+        choice != 0 ? printf("Wrong choice.\n\n") : printf("Bye Bye!!!\n\n");
     }
   } while(choice != 0);
-
 
   return 0;
 }

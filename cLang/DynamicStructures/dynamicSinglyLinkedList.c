@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "../mergeSort.c"
 
+
 int countNodes(Node *head) {
   int count = 0;
 
@@ -129,7 +130,9 @@ void insertAtEnd(Node **list, int val) {
 }
 
 void listSort(Node **list) {
-  if(*list) {
+  int nodes = countNodes(*list);
+  
+  if(*list && nodes > 1) {
     mergeSort(list);
   } else {
     printf("Not enough elements.\n\n");
