@@ -6,41 +6,52 @@
 
 
 int main() {
-  int choice, val;
-  List table[LENGTH];
+   char *file = "advent1.txt";
+   char *buffer = stringBuffer(file);
+   int length = stringLen(buffer) / 2;
+   int i, leftIdx = 0, rightIdx = 0;
 
-  tableInit(table);
+   for(i = 0; i < length; i++) {
+      if(buffer[i] != ' ' && buffer[i] != '\n') {
+         leftIdx++;
+      }
+   }
+ 
+   int l[leftIdx];
+   int r[leftIdx];
+ 
+   for(i = 0; buffer[i] != '\0'; i++) {
+      for(leftIdx = 0; buffer[i] != ' '; leftIdx++) {
+         l[leftIdx] = (int) buffer[i];
+         i++;
+      }
 
-  do {
-    printf("\t0 - Exit\n\t1 - Insert\n\t2 - Delete\n\t3 - Show table\n\t4 - Search\n\n");
-    scanf("%d", &choice);
-    getchar();
+      quickSort(l, 0, 4);
 
-    switch(choice) {
-      case 1:
-        insert(table, val);
-      break;
+      for(leftIdx = 0; leftIdx < 5; leftIdx++) {
+         printf("%c, ", l[leftIdx]);
+      }
+      
+      printf("- ");
+ 
+      while(buffer[i] != '\n' && buffer[i] != '\0') {
+         if(buffer[i] != ' ') {
+            r[rightIdx] = (int) buffer[i];
+            rightIdx++;
+         }
+         i++;
+      }
 
-      case 2:
-        val = delete(table, val);
-        val ? printf("%d deleted.\n\n", val) : printf("Element not found.\n\n");
-      break;
+      quickSort(r, 0, 4);
 
-      case 3:
-        tablePrint(table);
-      break;
+      for(rightIdx = 0; rightIdx < 5; rightIdx++) {
+         printf("%c, ", r[rightIdx]);
+      }
 
-      case 4:
-        val = search(table, val);
-        val ? printf("%d found.\n\n", val) : printf("Element not found.\n\n");
-      break;
+      rightIdx = 0;
 
-      default:
-        choice != 0 ? printf("Wrong choice!\n\n") : printf("Good bye!!!\n\n");
-    }
-  } while(choice != 0);
+      printf("\n");
+   }
 
-  tableInit(table);
-
-  return 0;
+   return 0;
 }

@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../String/stringCopy.c"
-#include "../String/stringConcat.c"
-#include "../String/stringLen.c"
+#include "../String/String.c"
 
 #define LENGTH 256
+
 
 typedef struct Node {
   int frequence;
@@ -177,8 +176,8 @@ void createMinHeap(char **dict, Node *root, char *path, int cols) {
     stringCopy(left, path);
     stringCopy(right, path);
 
-    stringConcat(left, "0");
-    stringConcat(right, "1");
+    concat(left, "0");
+    concat(right, "1");
 
     createMinHeap(dict, root->left, left, cols);
     createMinHeap(dict, root->right, right, cols);
@@ -211,7 +210,7 @@ char* encode(char **dict, unsigned char *text) {
   char *code = calloc(length, sizeof(char));
 
   while(text[i] != '\0') {
-    stringConcat(code, dict[text[i]]);
+    concat(code, dict[text[i]]);
     i++;
   }
 
@@ -235,7 +234,7 @@ char* decode(unsigned char *text, Node *root) {
     if(!aux->left && !aux->right) {
       temp[0] = aux->character;
       temp[1] = '\0';
-      stringConcat(decoded, temp);
+      concat(decoded, temp);
       aux = root;
     }
 

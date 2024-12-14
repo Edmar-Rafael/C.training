@@ -50,7 +50,7 @@ void print_tree_helper(rbtree_node n, int step) {
   }
 }
 
-preorder(struct rbtree_node_t *ptr) {
+preorder(Class rbtree_node_t *ptr) {
   rbtree t;
   if(t == NULL) {
     printf("Tree is empty");
@@ -63,7 +63,7 @@ preorder(struct rbtree_node_t *ptr) {
   }
 }
 
-inorder(struct rbtree_node_t *ptr) {
+inorder(Class rbtree_node_t *ptr) {
   rbtree t;
   if(t == NULL) {
     printf("Tree is empty");
@@ -76,7 +76,7 @@ inorder(struct rbtree_node_t *ptr) {
   }
 }
 
-postorder(struct rbtree_node_t *ptr) {
+postorder(Class rbtree_node_t *ptr) {
   rbtree t;
   if(t == NULL) {
     printf("Tree is empty");

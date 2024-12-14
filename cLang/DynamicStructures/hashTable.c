@@ -27,21 +27,23 @@ void insert(int t[], int val) {
   t[id] = val;
 }
 
-int delete(int t[], int val) {
+int delete(int t[], int key) {
   printf("Type a number to delete: ");
-  scanf("%d", &val);
+  scanf("%d", &key);
 
-  int id = hash(val);
+  int count = 0;
+  int id = hash(key);
 
-  while(t[id] != val && t[id] != 0) {
+  while(t[id] != key && count < LENGTH) {
     id = hash(id + 1);
+    count++;
   }
 
-  val = t[id];
+  key = t[id];
 
   t[id] = 0;
 
-  return val ? val : t[id];
+  return key ? key : t[id];
 }
 
 void tablePrint(int t[]) {

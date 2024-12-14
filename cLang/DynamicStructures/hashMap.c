@@ -85,7 +85,7 @@ void listPrint(List *t) {
 
   printf("Length: %d-> ", t->length);
   while(head) {
-    printf("-> %d", head->key);
+    printf("%d-> ", head->key);
     head = head->next;
   }
 }
