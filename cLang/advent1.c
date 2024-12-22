@@ -4,26 +4,26 @@
 
 
 int main() {
-   char *buffer = stringBuffer("advent1.txt");
+   char *file = stringBuffer("advent1.txt");
    int i = 0, j, k = 0, sum, lineIdx = 0;
    int arrLRDiffLen;
    int totalSum = 0;
 
-   for(arrLRDiffLen = 0; buffer[arrLRDiffLen] != ' '; arrLRDiffLen++);
+   for(arrLRDiffLen = 0; file[arrLRDiffLen] != ' '; arrLRDiffLen++);
 
    int *l = (int *) malloc(sizeof(arrLRDiffLen));
    int *r = (int *) malloc(sizeof(arrLRDiffLen));
    int *diff = (int *) malloc(sizeof(arrLRDiffLen));
 
-   while(buffer[i] != '\0') {
+   while(file[i] != '\0') {
       printf("%4d:", lineIdx);
-      for(j = 0; buffer[i] != ' '; j++, i++) {
-         l[j] = (int) buffer[i];
+      for(j = 0; file[i] != ' '; j++, i++) {
+         l[j] = (int) file[i];
       }
 
-      for(i, j = 0; buffer[i] != '\n' && buffer[i] != '\0'; i++) {
-         if(buffer[i] != ' ') {
-            r[j] = (int) buffer[i];
+      for(i, j = 0; file[i] != '\n' && file[i] != '\0'; i++) {
+         if(file[i] != ' ') {
+            r[j] = (int) file[i];
             j++;
          }
       }
