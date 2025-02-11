@@ -4,277 +4,261 @@
 
 #define LENGTH 256
 
-
 typedef struct Node {
-  int frequence;
-  unsigned char character;
-  struct Node *next;
-  struct Node *left, *right;
+   int frequence;
+   unsigned char character;
+   struct Node *next;
+   struct Node *left, *right;
 } Node;
 
-typedef struct List {
-  int length;
-  Node *head;
+typedef struct {
+   int length;
+   Node *head;
 } List;
 
+int i;
+
 void frequenceTableInit(unsigned int t[]) {
-  for(int i = 0; i < LENGTH; i++) {
-    t[i] = 0;
-  }
+   for(i = 0; i < LENGTH; i++) {
+      t[i] = 0;
+   }
 }
 
-void frequenceTableFill(unsigned char str[], unsigned int t[]) {
-  int i = 0;
-
-  while(str[i] != '\0') {
-    t[str[i]]++;
-    i++;
-  }
+void frequenceTableFill(unsigned int t[], unsigned char *str) {
+   for(i = 0; str[i] != '\0'; i++) {
+      t[str[i]]++;
+   }
 }
 
 void frequenceTablePrint(unsigned int t[]) {
-  for(int i = 0; i < LENGTH; i++) {
-    if(t[i] != 0) {
-      printf("%3d - %u = %c\n", i, t[i], i);
-    }
-  }
-  printf("\n");
+   for(i = 0; i < LENGTH; i++) {
+      if(t[i] > 0) {
+         printf("%d: %u = %c\n", i, t[i], i);
+      }
+   }
 }
 
 void listInit(List *list) {
-  list->head = NULL;
-  list->length = 0;
+   list->head = NULL;
+    list->length = 0;
 }
 
 void pushInorder(List *list, Node *node) {
-  if(!list->head) {
-    list->head = node;
-  } else if(node->frequence < list->head->frequence) {
-    node->next = list->head;
-    list->head = node;
-  } else {
-    Node *head = list->head;
+   if(!list->head) {
+      list->head = node;
+   } else if(list->head->frequence > node->frequence) {
+      node->next = list->head;
+      list->head = node;
+   } else {
+      Node *head = list->head;
 
-    while(head->next && head->next->frequence <= node->frequence) {
-      head = head->next;
-    }
+      while(head->next && head->next->frequence < node->frequence) {
+         head = head->next;
+      }
 
-    node->next = head->next;
-    head->next = node;
-  }
+      node->next = head->next;
+      head->next = node;
+   }
 
-  list->length++;
+   list->length++;
 }
 
-void listFill(unsigned int t[], List *list) {
-  for(int i = 0; i < LENGTH; i++) {
-    if(t[i] > 0) {
-      Node *newNode = (struct Node *) malloc(sizeof(struct Node));
+void listFill(List *list, unsigned int t[]) {
+   for(i = 0; i < LENGTH; i++) {
+      if(t[i] > 0) {
+         Node *newNode = (struct Node *) malloc(sizeof(struct Node));
 
-      if(newNode) {
-        newNode->character = i;
-        newNode->frequence = t[i];
-        newNode->next = NULL;
-        newNode->left = NULL;
-        newNode->right = NULL;
+         if(newNode) {
+            newNode->character = i;
+            newNode->frequence = t[i];
+            newNode->next = NULL;
+            newNode->left = NULL;
+            newNode->right = NULL;
 
-        pushInorder(list, newNode);
-      } else {
-        printf("Memory allocation error...!");
-        break;
+            pushInorder(list, newNode);
+         } else {
+            printf("Memory allocation error!\n\n");
+            break;
+         }
       }
-    }
-  }
+   }
 }
 
 void listPrint(List *list) {
-  Node *head = list->head;
+   Node *head = list->head;
 
-  printf("Sorted list: Length: %d\n", list->length);
-
-  while(head) {
-    printf("Character: %c Frequence: %d\n", head->character, head->frequence);
-    head = head->next;
-  }
-  printf("\n");
+   printf("\nSorted List.\t Length: %d\n", list->length);
+   while(head) {
+      printf("Character: %c   Frequence: %d\n", head->character, head->frequence);
+      head = head->next;
+   }
+   printf("\n");
 }
 
 Node* pop(List *list) {
-  if(list->head) {
-    Node *rm = list->head;
-    list->head = rm->next;
-    rm->next = NULL;
-    list->length--;
-    return rm;
-  }
-
-  printf("Empty list.\n\n");
-  return NULL;
-}
-
-Node* treeInit(List *list) {
-  while(list->length > 1) {
-    Node *first = pop(list);
-    Node *second = pop(list);
-
-    Node *newNode = (struct Node *) malloc(sizeof(struct Node));
-
-    if(newNode) {
-      newNode->character = '+';
-      newNode->frequence = first->frequence + second->frequence;
-      newNode->left = first;
-      newNode->right = second;
-      newNode->next = NULL;
-
-      pushInorder(list, newNode);
-    } else {
-      printf("treeInit memory allocation error!\n");
+   if(!list) {
       return NULL;
-    }
-  }
+   }
 
-  return list->head;
+   Node *rm = list->head;
+   list->head = rm->next;
+   rm->next = NULL;
+   list->length--;
+   return rm;
 }
 
-void treePrint(Node *root, int size) {
-  if(!root->left && !root->right) {
-    printf("Leaf: %c\tHeight: %d\n", root->character, size);
-  } else {
-    treePrint(root->left, size + 1);
-    treePrint(root->right, size + 1);
-  }
+Node* HuffmanTreeInsert(List *list) {
+   while(list->length > 1) {
+      Node *first = pop(list);
+      Node *second = pop(list);
+
+      Node *newNode = (struct Node *) malloc(sizeof(struct Node));
+
+      if(newNode) {
+         newNode->character = '+';
+         newNode->frequence = first->frequence + second->frequence;
+         newNode->next = NULL;
+         newNode->left = first;
+         newNode->right = second;
+
+         pushInorder(list, newNode);
+      } else {
+         printf("HuffmanTree error!!!\n");
+         return NULL;
+      }
+   }
+
+   return list->head;
 }
 
+void HuffmanTreePrint(Node *root, int height) {
+   if(!root->left && !root->right) {
+      printf("Leaf: %c   Height: %d\n", root->character, height);
+   } else {
+      HuffmanTreePrint(root->left, height + 1);
+      HuffmanTreePrint(root->right, height + 1);
+   }
+}
 int maximumDepth(Node *root) {
-  if(!root) {
-    return -1;
-  }
+   if(!root) {
+      return -1;
+   }
 
-  int l = maximumDepth(root->left);
-  int r = maximumDepth(root->right);
+   int l = maximumDepth(root->left);
+   int r = maximumDepth(root->right);
 
-  return (l > r ? l : r) + 1;
+   return (l > r ? l : r) + 1;
 }
 
-char** minHeap(int cols) {
-  int i;
-  char **dictionary = (char**) malloc(sizeof(char*) * LENGTH);
+char** dictionaryInit(int cols) {
+   char **dictionary = (char **) malloc(sizeof(char*) * LENGTH);
 
-  for(i = 0; i < LENGTH; i++) {
-    dictionary[i] = calloc(cols, sizeof(char));
-  }
+   for(i = 0; i < LENGTH; i++) {
+      dictionary[i] = calloc(cols,sizeof(char));
+   }
 
-  return dictionary;
+   return dictionary;
 }
 
-void createMinHeap(char **dict, Node *root, char *path, int cols) {
-  char left[cols], right[cols];
+void createDictionary(char **dict, Node *root, char *path, int cols) {
+   char left[cols], right[cols];
 
-  if(!root->left && !root->right) {
-    stringCopy(dict[root->character], path);
-  } else {
-    stringCopy(left, path);
-    stringCopy(right, path);
+   if(!root->left && !root->right) {
+      stringCopy(dict[root->character], path);
+   } else {
+      stringCopy(left, path);
+      stringCopy(right, path);
 
-    concat(left, "0");
-    concat(right, "1");
+      concat(left, "0");
+      concat(right, "1");
 
-    createMinHeap(dict, root->left, left, cols);
-    createMinHeap(dict, root->right, right, cols);
-  }
+      createDictionary(dict, root->left, left, cols);
+      createDictionary(dict, root->right, right, cols);
+   }
 }
 
-void minHeapPrint(char **dict) {
-  printf("\nMinHeap: \n");
-  for(int i = 0; i < LENGTH; i++) {
-    if(stringLen(dict[i]) > 0) {
-      printf("%3d: %s\n", i, dict[i]);
-    }
-  }
+void dictionaryPrint(char **dict) {
+   printf("\nDictionary.\n");
+   for(i = 0; i < LENGTH; i++) {
+      if(stringLen(dict[i]) > 0) {
+         printf("%d: %s\n", i, dict[i]);
+      }
+   }
 }
 
-int findStringLength(char **dict, unsigned char *text) {
-  int i = 0, len;
+int findCodeLength(char **dict, unsigned char *str) {
+   int len = 0;
 
-  while(text[i] != '\0') {
-    len = len + stringLen(dict[text[i]]);
-    i++;
-  }
+   for(i = 0; str[i] != '\0'; i++) {
+      len += stringLen(dict[str[i]]);
+   }
 
-  return len + 1;
+   return len;
 }
 
-char* encode(char **dict, unsigned char *text) {
-  int i = 0;
-  int length = findStringLength(dict, text);
-  char *code = calloc(length, sizeof(char));
+char* encode(char **dict, unsigned char *str) {
+   int codeLen = findCodeLength(dict, str);
 
-  while(text[i] != '\0') {
-    concat(code, dict[text[i]]);
-    i++;
-  }
+   char *code = (char *) calloc(codeLen, sizeof(char));
 
-  return code;
+   for(i = 0; str[i] != '\0'; i++) {
+      concat(code, dict[str[i]]);
+   }
+
+   return code;
 }
 
-char* decode(unsigned char *text, Node *root) {
-  int i = 0;
-  Node *aux = root;
-  char temp[2];
+char* toDecode(char *code, Node *root, unsigned char *str) {
+   Node *aux = root;
+   char temp[2];
 
-  char *decoded = calloc(stringLen(text), sizeof(char));
+   char *decode = (char *) calloc(stringLen(str), sizeof(char));
 
-  while(text[i] != '\0') {
-    if(text[i] == '0') {
-      aux = aux->left;
-    } else {
-      aux = aux->right;
-    }
+   for(i = 0; code[i] != '\0'; i++) {
+      if(code[i] == '0') {
+         aux = aux->left;
+      } else {
+         aux = aux->right;
+      }
 
-    if(!aux->left && !aux->right) {
-      temp[0] = aux->character;
-      temp[1] = '\0';
-      concat(decoded, temp);
-      aux = root;
-    }
+      if(!aux->left && !aux->right) {
+         temp[0] = aux->character;
+         temp[1] = '\0';
+         concat(decode, temp);
+         aux = root;
+      }
+   }
 
-    i++;
-  }
-
-  return decoded;
+   return decode;
 }
 
 
 int main() {
-  unsigned char text[] = {"Lets try some Huffman!"};
   unsigned int table[LENGTH];
-  List list;
-  Node *root = NULL;
-  int cols;
-  char **dict;
-  char *code, *decoded;
+   unsigned char *text = {"I'll squeeze you till the death!!!"};
+   List list;
 
-  frequenceTableInit(table);
-  frequenceTableFill(text, table);
-  frequenceTablePrint(table);
+   frequenceTableInit(table);
+   frequenceTableFill(table, text);
+   frequenceTablePrint(table);
 
-  listInit(&list);
-  listFill(table, &list);
-  listPrint(&list);
+   listInit(&list);
+   listFill(&list, table);
+   listPrint(&list);
 
-  root = treeInit(&list);
-  treePrint(root, 0);
+   Node *root = HuffmanTreeInsert(&list);
+   HuffmanTreePrint(root, 0);
 
-  cols = maximumDepth(root) + 1;
-  dict = minHeap(cols);
-  createMinHeap(dict, root, "", cols);
-  minHeapPrint(dict);
+   int cols = maximumDepth(root);
+   char **dictionary = dictionaryInit(cols);
+   createDictionary(dictionary, root, "", cols);
+   dictionaryPrint(dictionary);
 
-  code = encode(dict, text);
-  printf("\nEncoded text: %s\n", code);
+   char *code = encode(dictionary, text);
+   printf("\nCode: %s\n", code);
 
-  decoded = decode(code, root);
-  printf("\ndecoded text: %s\n", decoded);
+   char *decode = toDecode(code, root, text);
+   printf("\ndecode: %s\n", decode);
 
   return 0;
 }

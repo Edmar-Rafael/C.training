@@ -25,20 +25,19 @@ void pushInorder(List *t, int val) {
     newNode->key = val;
     newNode->next = NULL;
 
-    if(!t->head || val < t->head->key) {
+    if(!t->head || t->head->key > val) {
       newNode->next = t->head;
       t->head = newNode;
     } else {
       Node *head = t->head;
-      Node *prev = head;
 
-      while(head->next && val < head->key) {
-        prev = head;
+      while(head->next && head->next->key < val) {
+        if(head->key == val) return;
         head = head->next;
       }
 
-      newNode->next = prev->next;
-      prev->next = newNode;
+      newNode->next = head->next;
+      head->next = newNode; 
     }
 
     t->length++;
@@ -125,9 +124,7 @@ int delete(List t[], int val) {
 
   int id = hash(val);
 
-  int el = popAtSpecificPos(&t[id], val);
-
-  return el;
+  return popAtSpecificPos(&t[id], val);
 }
 
 void tablePrint(List t[]) {

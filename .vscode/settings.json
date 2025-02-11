@@ -4,7 +4,8 @@
     "assert.h": "c",
     "MINESWEEPER.C": "cpp",
     "signal.h": "c",
-    "features.h": "c"
+    "features.h": "c",
+    "stdio.h": "c"
   },
   "C_Cpp.errorSquiggles": "enabled"
 }

@@ -30,7 +30,7 @@ void swapper(Node **headRef, int key1, int key2) {
     scanf("%d", &key2);
 
     if(head->next == NULL || key1 == key2) {
-      printf("Not enough elements.\n\n");
+      printf("Empty list or same keys typed.\n\n");
       return;
     }
 

@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "practice.h"
+
+typedef struct Node {
+  int data;
+  struct Node *next;
+} Node;
+
 
 void splitMiddle(Node *source, Node **frontRef, Node **backRef) {
   Node *slow = source;

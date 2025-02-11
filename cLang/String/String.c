@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 int stringLen(char *str) {
    int i = 0;
  
@@ -83,7 +85,7 @@ void stringCopy(char *to, char *from) {
    to[i] = '\0';
 }
 
-char* stringBuffer(char *fileName) {
+char* fileReader(char *fileName) {
    FILE *input = fopen(fileName, "rb");
    int size;
    char *buffer;
