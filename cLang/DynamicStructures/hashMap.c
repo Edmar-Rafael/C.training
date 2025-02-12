@@ -19,31 +19,35 @@ void listInit(List *t) {
 }
 
 void pushInorder(List *t, int val) {
-  Node *newNode = (struct Node *) malloc(sizeof(struct Node));
+   Node *newNode = (struct Node *) malloc(sizeof(struct Node));
 
-  if(newNode) {
-    newNode->key = val;
-    newNode->next = NULL;
+   if(newNode) {
+      newNode->key = val;
+      newNode->next = NULL;
 
-    if(!t->head || t->head->key > val) {
-      newNode->next = t->head;
-      t->head = newNode;
-    } else {
-      Node *head = t->head;
+      if(!t->head || t->head->key > val) {
+         newNode->next = t->head;
+         t->head = newNode;
+      } else {
+         Node *head = t->head;
 
-      while(head->next && head->next->key < val) {
-        if(head->key == val) return;
-        head = head->next;
+         while(head->next && head->next->key < val) {
+            head = head->next;
+         }
+
+         if(head->next && head->next->key == val || head->key == val) {
+            free(newNode);
+            return;
+         }
+
+         newNode->next = head->next;
+         head->next = newNode; 
       }
 
-      newNode->next = head->next;
-      head->next = newNode; 
-    }
-
-    t->length++;
-  } else {
-    printf("Memory allocation error!!!\n\n");
-  }
+      t->length++;
+   } else {
+      printf("Memory allocation error!!!\n\n");
+   }
 }
 
 int popAtSpecificPos(List *t, int val) {
