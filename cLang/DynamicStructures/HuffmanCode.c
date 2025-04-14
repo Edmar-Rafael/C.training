@@ -161,22 +161,71 @@ char** dictionaryInit(int cols) {
 }
 
 void createDictionary(char **dict, Node *root, char *path, int cols) {
-   char left[cols], right[cols];
 
-   if(!root->left && !root->right) {
-      stringCopy(dict[root->character], path);
-   } else {
-      stringCopy(left, path);
-      stringCopy(right, path);
+   struct DictIteration {
+      Node *root;
+      char path[LENGTH];
+      char left_done;
+      char right_done;
+   };
+   struct DictIteration dict_stack[LENGTH] = {0};
+   dict_stack[0].root = root;
+   stringMemset(dict_stack[0].path, 0, cols);
+   stringCopy(dict_stack[0].path, path);
+   dict_stack[0].left_done = 0;
+   dict_stack[0].right_done = 0;
+   int iterator = 0;
+   while (1){
+      struct DictIteration *current = &dict_stack[iterator];      
+      if(!current->root->left  && !current->root->right){
+  printf("caracter %d\n",current->root->character);
+         printf("path %s\n",current->path);     
+      stringCopy(dict[current->root->character], current->path);
+      }
+       
 
-      concat(left, "0");
-      concat(right, "1");
+     // printf("iterator %d\n", iterator);
+      //printf("current %p\n", current);
+      if(current->root->left && !current->left_done){
+         current->left_done = 1;
+         iterator+=1;
+         char left[cols];
+         stringMemset(left, 0, cols);
+         stringCopy(left, current->path);
+         concat(left, "0");
+         dict_stack[iterator].root = current->root->left;
+         stringCopy(dict_stack[iterator].path, left);
+         dict_stack[iterator].right_done = 0;
+         dict_stack[iterator].left_done = 0;
+         
+         continue;
+      }
+      
+      if(current->root->right && !current->right_done){
+         current->right_done = 1;
+         iterator+=1;
+         char right[cols];
+         stringMemset(right, 0, cols);
+         stringCopy(right, current->path);
+         concat(right, "1");
+         dict_stack[iterator].root = current->root->right;
+         stringCopy(dict_stack[iterator].path, right);
+         dict_stack[iterator].right_done = 0;
+         dict_stack[iterator].left_done = 0;
+         
+         continue;
+      }
 
-      createDictionary(dict, root->left, left, cols);
-      createDictionary(dict, root->right, right, cols);
+
+      if(iterator == 0){
+         break;
+      }
+
+      iterator-=1;   
    }
-}
+   
 
+}
 void dictionaryPrint(char **dict) {
    printf("\nDictionary.\n");
    for(i = 0; i < LENGTH; i++) {
