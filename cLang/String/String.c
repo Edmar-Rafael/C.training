@@ -1,5 +1,15 @@
 #include <stdio.h>
 
+
+void stringMemset(char *str, char c, int n) {
+   int i;
+ 
+   for(i = 0; i < n; i++) {
+     str[i] = c;
+   }
+ 
+   str[n] = '\0';
+}
 int stringLen(char *str) {
    int i = 0;
  
