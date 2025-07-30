@@ -222,6 +222,39 @@ int main() {
       }
    }
 
+   int len = 0;
+
+   for(i = 0; text[i] != '\0'; i++) {
+      len += stringLen(dict[text[i]]);
+   }
+
+   char *code = (char *) calloc(len, sizeof(char));
+
+   for(i = 0; text[i] != '\0'; i++) {
+      concat(code, dict[text[i]]);
+   }
+
+   printf("\ncode: %s\n", code);
+
+   current = list.head;
+   char temp[2];
+
+   char *decode = (char *) calloc(stringLen(text), sizeof(char));
+
+   for(i = 0; code[i] != '\0'; i++) {
+      if(code[i] == '0') current = current->left;
+      if(code[i] == '1') current = current->right;
+
+      if(!current->left && !current->right) {
+         temp[0] = current->character;
+         temp[1] = '\0';
+         concat(decode, temp);
+         current = list.head;
+      }
+   }
+
+   printf("decode: %s\n", decode);
+
    return 0;
 }
 /*
