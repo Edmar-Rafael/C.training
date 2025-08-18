@@ -4,256 +4,36 @@
 int main() {
    printStyles();
 
-   unsigned int table[LENGTH] = {0}; 
-   unsigned char *text = {"Well! At least I think I should try it."};
+   unsigned int table[LENGTH] = {0};
+   unsigned char *text = "Well! At least I think I should try it.";
 
-   for(i = 0; text[i] != '\0'; i++) {
-      table[text[i]]++;
-   }
-
-   for(i = 0; i < LENGTH; i++) {
-      if(table[i]) {
-         printf("%3d = %c : %2d\n", i, i, table[i]);
-      }
-   }
+   frequenceTableFill(table, text);
+   frequenceTablePrint(table);
 
    List list;
 
-   list.head = NULL;
-   list.length = 0;
+   listInit(&list);
+   listFill(&list, table);
+   listPrint(list);
 
-   Node *current;
-
-   for(i = 0; i < LENGTH; i++) {
-      if(table[i] > 0) {
-         Node *newNode = (struct Node *) malloc(sizeof(struct Node));
-
-         if(newNode) {
-            newNode->character = i;
-            newNode->frequence = table[i];
-            newNode->next = NULL;
-            newNode->left = NULL;
-            newNode->right = NULL;
-
-            if(!list.head || list.head->frequence >= newNode->frequence) {
-               newNode->next = list.head;
-               list.head = newNode;
-               list.length++;
-               continue;
-            }
-
-            current = list.head;
-
-            while(current->next && current->next->frequence < newNode->frequence) {
-               current = current->next;
-            }
-
-            newNode->next = current->next;
-            current->next = newNode;
-            list.length++;
-         }
-      }
-   }
-
-   current = list.head;
-
-   printf("\nSorted List\n");
-   while(current) {
-      printf("Character: %c\t Frequence: %d\n", current->character, current->frequence);
-      current = current->next;
-   }
-
-   while(list.length > 1) {
-      Node *first = list.head;
-      list.head = first->next;
-      first->next = NULL;
-      list.length--;
-
-      Node *second = list.head;
-      list.head = second->next;
-      second->next = NULL;
-      list.length--;
-
-      Node *newNode = (struct Node *) malloc(sizeof(struct Node));
-
-      if(newNode) {
-         newNode->character = '+';
-         newNode->frequence = first->frequence + second->frequence;
-         newNode->next = NULL;
-         newNode->left = first;
-         newNode->right = second;
-
-         if(!list.head || list.head->frequence >= newNode->frequence) {
-            newNode->next = list.head;
-            list.head = newNode;
-            list.length++;
-            continue;
-         }
-
-         current = list.head;
-
-         while(current->next && current->next->frequence < newNode->frequence) {
-            current = current->next;
-         }
-
-         newNode->next = current->next;
-         current->next = newNode;
-         list.length++; 
-      }
-   }
-   
    Stack stk;
+   stackInit(&stk);
 
-   stk.height = 0;
-   stk.top = NULL;
+   Node *root = HuffmanTreeInsert(&list);
+   iterativeStackTreePrint(&stk, root);
 
-   current = list.head;
-   Node *rm = NULL;
+   int cols = iterativeMaximumDepth(&stk, root);
 
-   int cols = 0;
+   char **dictionary = dictionaryInit(cols);
 
-   while(1) {
-      if(!current->visited || current->left && !current->left->visited || current->right && !current->right->visited) {
-         Node *newNode = (struct Node *) malloc(sizeof(struct Node));
+   iterativeCreateDictionary(dictionary, root, &stk, cols);
+   dictionaryPrint(dictionary);
 
-         if(newNode) {
-            newNode->character = current->character;
-            newNode->frequence = stk.height;
-            newNode->left = current->left;
-            newNode->right = current->right;
-            newNode->next = stk.top;
-            stk.top = newNode;
-            current->visited = 1;
-
-            if(!newNode->left && !newNode->right)
-               printf("\nLeaf: %c\t\tHeight: %d", newNode->character, stk.height);
-            
-            if(current->left && !current->left->visited) {
-               current = current->left;
-               stk.height++;
-               continue;
-            }
-
-            if(current->right && !current->right->visited) {
-               current = current->right;
-               stk.height++;
-               continue;
-            }
-         }
-      }
-      
-      rm = stk.top;
-      stk.top = rm->next;
-      current = stk.top;
-      free(rm);
-      if(stk.height > cols) cols = stk.height;
-      if(stk.height == 0) break;
-      stk.height = current->frequence;
-   }
-
-   printf("\n");
-
-   char **dict = (char **) malloc(sizeof(char *) * LENGTH);
-
-   for(i = 0; i < LENGTH; i++) {
-      dict[i] = (char *) calloc(cols, sizeof(char));
-   }
-
-   stk.top = NULL;
-   stk.height = 0;
-
-   current = list.head;
-
-   char *path = (char *) calloc(cols, sizeof(char));
-
-   while(1) {
-      if(current->visited || current->left && current->left->visited || current->right && current->right->visited) {
-         Node *node = (struct Node *) malloc(sizeof(struct Node));
-
-         if(node) {
-            node->character = current->character;
-            node->frequence = stk.height;
-            node->left = current->left;
-            node->right = current->right;
-            node->next = stk.top;
-            stk.top = node;
-            current->visited = 0;
-            if(!node->left && !node->right) {
-               stringCopy(dict[node->character], path);
-            }
-
-            if(current->left && current->left->visited) {
-               char left[cols];
-               stringMemSet(left, 0, cols);
-               stringCopy(left, path);
-               concat(left, "0");
-               current = current->left;
-               stk.height++;
-               stringCopy(path, left);
-               continue;
-            }
-
-            if(current->right && current->right->visited) {
-               char right[cols];
-               stringMemSet(right, 0, cols);
-               stringCopy(right, path);
-               concat(right, "1");
-               current = current->right;
-               stk.height++;
-               stringCopy(path, right);
-               continue;
-            }
-         }
-      }
-
-      rm = stk.top;
-      stk.top = rm->next;
-      current = stk.top;
-      path[stk.height - 1] = '\0';
-      free(rm);
-      if(stk.height == 0) break;
-      stk.height = current->frequence;
-   }
-   printf("\n");
-
-   for(i = 0; i < LENGTH; i++) {
-      if(stringLen(dict[i]) > 0) {
-         printf("%3d: %s\n", i, dict[i]);
-      }
-   }
-
-   int len = 0;
-
-   for(i = 0; text[i] != '\0'; i++) {
-      len += stringLen(dict[text[i]]);
-   }
-
-   char *code = (char *) calloc(len, sizeof(char));
-
-   for(i = 0; text[i] != '\0'; i++) {
-      concat(code, dict[text[i]]);
-   }
-
+   char *code = encode(dictionary, text);
    printf("\ncode: %s\n", code);
 
-   current = list.head;
-   char temp[2];
-
-   char *decode = (char *) calloc(stringLen(text), sizeof(char));
-
-   for(i = 0; code[i] != '\0'; i++) {
-      if(code[i] == '0') current = current->left;
-      if(code[i] == '1') current = current->right;
-
-      if(!current->left && !current->right) {
-         temp[0] = current->character;
-         temp[1] = '\0';
-         concat(decode, temp);
-         current = list.head;
-      }
-   }
-
-   printf("decode: %s\n", decode);
+   char *decoded = toDecode(code, root, text);
+   printf("\ndecode: %s\n", decoded);
 
    return 0;
 }

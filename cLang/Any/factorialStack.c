@@ -4,7 +4,7 @@
 
 typedef struct Node {
   int val;
-  struct Node *next;
+  struct Node *top;
 } Node;
 
 Node* push(Node *stk, int data) {
@@ -12,7 +12,7 @@ Node* push(Node *stk, int data) {
 
   if(newNode) {
     newNode->val = data;
-    newNode->next = stk;
+    newNode->top = stk;
     return newNode;
   }
 
@@ -25,7 +25,7 @@ Node* pop(Node **stk) {
 
   if(*stk) {
     rm = *stk;
-    *stk = rm->next;
+    *stk = rm->top;
   } else {
     printf("Stack underflow.");
   }
@@ -38,7 +38,7 @@ void printStack(Node *stk) {
 
   while(stk) {
     printf("\t%d\n", stk->val);
-    stk = stk->next;
+    stk = stk->top;
   }
 
   printf("\t------- end ----------\n");

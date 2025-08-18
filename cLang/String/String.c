@@ -1,13 +1,27 @@
 #include <stdio.h>
 
-int stringLen(char *str) {
-   int i = 0;
- 
-   while(str[i] != '\0') {
-     i++;
+void stringMemSet(char *str, char c, int n) {
+   int i;
+
+   for(i = 0; i < n; i++) {
+      str[i] = c;
    }
+
+   str[n] = '\0';
+}
+
+int stringLen(char *str) {
+   if(str) {
+      int i = 0;
  
-   return i;
+      while(str[i] != '\0') {
+         i++;
+      }
+   
+      return i;
+   }
+
+   return 0;
 }
 
 void stringInverter(char *str) {
@@ -75,14 +89,19 @@ void concat(char *s1, char *s2) {
 }
 
 void stringCopy(char *to, char *from) {
-   int i = 0;
+   if(from) {
+      int i = 0;
  
-   while(from[i] != '\0') {
-     to[i] = from[i];
-     i++;
+      while(from[i] != '\0') {
+         to[i] = from[i];
+         i++;
+      }
+   
+      to[i] = '\0';
+      return;
    }
- 
-   to[i] = '\0';
+
+   printf("No string To copy!!!");
 }
 
 char* fileReader(char *fileName) {
