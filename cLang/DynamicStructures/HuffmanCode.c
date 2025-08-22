@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "../Main/styles.c"
 #include "../String/String.c"
 
 #define LENGTH 256
 
-#define LENGTH 256
 
 typedef struct Node {
    int frequence;
@@ -63,6 +63,24 @@ void pushInorder(List *list, Node *node) {
    node->next = current->next;
    current->next = node;
    list->length++;
+}
+
+Node* createStackNewNode(Node *curr, Stack *stk) {
+   Node *node = (struct Node *) malloc(sizeof(struct Node));
+
+   if(node) {
+      curr->visited = 1;
+      node->visited = curr->visited;
+      node->height = stk->height;
+      node->character = curr->character;
+      node->frequence = curr->frequence;
+      node->left = curr->left;
+      node->right = curr->right;
+      node->next = stk->top;
+      stk->top = node;
+   }
+
+   return node;
 }
 
 void listFill(List *list, unsigned int t[]) {
@@ -149,27 +167,24 @@ void stackInit(Stack *stk) {
    stk->top = NULL;
 }
 
+Node* popStack(Stack *stk) {
+   Node *remove = stk->top;
+   stk->top = remove->next;
+   remove->next = NULL;
+   return remove;
+}
+
 void iterativeStackTreePrint(Stack *stk, Node *root) {
    Node *current = root;
 
    printf("Huffman Tree.\n");
    while(1) {
-      Node *newNode = (struct Node *) malloc(sizeof(struct Node));
+      if(!current->visited) {
+         Node *newNode = createStackNewNode(current, stk);
+      }
 
-      if(newNode && !current->visited) {
-         current->visited = 1;
-         newNode->visited = current->visited;
-         newNode->height = stk->height;
-         newNode->character = current->character;
-         newNode->frequence = current->frequence;
-         newNode->left = current->left;
-         newNode->right = current->right;
-         newNode->next = stk->top;
-         stk->top = newNode;
-         
-         if(!newNode->left && !newNode->right) {
-            printf("Leaf: %c\t\tHeight: %d\n", newNode->character, stk->height);
-         }
+      if(!current->left && !current->right) {
+         printf("Leaf: %c\t\tHeight: %d\n", current->character, stk->height);
       }
 
       if(current->left && !current->left->visited) {
@@ -184,9 +199,8 @@ void iterativeStackTreePrint(Stack *stk, Node *root) {
          continue;
       }
 
-      Node *rm = stk->top;
-      stk->top = rm->next;
-      rm->next = NULL;
+      Node *rm = popStack(stk);
+
       current = stk->top;
       if(rm->right && rm->right->visited) {
          rm->right->visited = 0;
@@ -209,18 +223,8 @@ int iterativeMaximumDepth(Stack *stk, Node *root) {
    int n = 0;
 
    while(1) {
-      Node *newNode = (struct Node *) malloc(sizeof(struct Node));
-
-      if(newNode && !current->visited) {
-         current->visited = 1;
-         newNode->visited = current->visited;
-         newNode->height = stk->height;
-         newNode->character = current->character;
-         newNode->frequence = current->frequence;
-         newNode->left = current->left;
-         newNode->right = current->right;
-         newNode->next = stk->top;
-         stk->top = newNode;
+      if(!current->visited) {
+         createStackNewNode(current, stk);
       }
 
       if(current->left && !current->left->visited) {
@@ -235,9 +239,8 @@ int iterativeMaximumDepth(Stack *stk, Node *root) {
          continue;
       }
 
-      Node *rm = stk->top;
-      stk->top = rm->next;
-      rm->next = NULL;
+      Node *rm = popStack(stk);
+
       current = stk->top;
       if(rm->right && rm->right->visited) {
          rm->right->visited = 0;
@@ -271,19 +274,11 @@ void iterativeCreateDictionary(char **dict, Node *root, Stack *stk, int cols) {
    char *path = (char *) calloc(cols, sizeof(char));
 
    while(1) {
-      Node *newNode = (struct Node *) malloc(sizeof(struct Node));
-
-      if(newNode && !current->visited) {
-         current->visited = 1;
-         newNode->visited = current->visited;
-         newNode->height = stk->height;
-         newNode->character = current->character;
-         newNode->left = current->left;
-         newNode->right = current->right;
-         newNode->next = stk->top;
-         stk->top = newNode;
-         if(!newNode->left && !newNode->right) stringCopy(dict[newNode->character], path);
+      if(!current->visited) {
+         Node *newNode = createStackNewNode(current, stk);
       }
+
+      if(!current->left && !current->right) stringCopy(dict[current->character], path);
 
       if(current->left && !current->left->visited) {
          current = current->left;
@@ -307,9 +302,8 @@ void iterativeCreateDictionary(char **dict, Node *root, Stack *stk, int cols) {
          continue;
       }
 
-      Node *rm = stk->top;
-      stk->top = rm->next;
-      rm->next = NULL;
+      Node *rm = popStack(stk);
+      
       current = stk->top;
       path[stk->height - 1] = '\0';
       if(rm->right && rm->right->visited) {
@@ -392,7 +386,8 @@ char* toDecode(char *code, Node *root, unsigned char *str) {
 
 
 int main() {
-  unsigned int table[LENGTH] = {0};
+   printStyles();
+   unsigned int table[LENGTH] = {0};
    unsigned char *text = {"I'll squeeze you till the death!!!"};
    List list;
 

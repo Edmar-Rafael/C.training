@@ -5,7 +5,7 @@ int main() {
    printStyles();
 
    unsigned int table[LENGTH] = {0};
-   unsigned char *text = "Well! At least I think I should try it.";
+   unsigned char *text = "Well! At least I think I should try it. And you will like it.";
 
    frequenceTableFill(table, text);
    frequenceTablePrint(table);
