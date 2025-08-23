@@ -11,7 +11,7 @@ int main() {
    frequenceTablePrint(table);
 
    List list;
-
+   
    listInit(&list);
    listFill(&list, table);
    listPrint(list);

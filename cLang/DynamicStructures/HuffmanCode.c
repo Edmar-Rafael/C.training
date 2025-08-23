@@ -36,7 +36,7 @@ void frequenceTableFill(unsigned int t[], unsigned char *str) {
 void frequenceTablePrint(unsigned int t[]) {
    for(i = 0; i < LENGTH; i++) {
       if(t[i] > 0) {
-         printf("%d = %u: %c\n", i, t[i], i);
+         printf("%3d = %3u: %c\n", i, t[i], i);
       }
    }
 }
@@ -167,11 +167,18 @@ void stackInit(Stack *stk) {
    stk->top = NULL;
 }
 
-Node* popStack(Stack *stk) {
+Node* popStack(Stack *stk, Node **curr) {
    Node *remove = stk->top;
    stk->top = remove->next;
    remove->next = NULL;
-   return remove;
+   *curr = stk->top;
+
+   if(remove->right && remove->right->visited) {
+      remove->right->visited = 0;
+      if(remove->left && remove->left->visited) remove->left->visited = 0;
+   }
+
+   free(remove);
 }
 
 void iterativeStackTreePrint(Stack *stk, Node *root) {
@@ -199,14 +206,7 @@ void iterativeStackTreePrint(Stack *stk, Node *root) {
          continue;
       }
 
-      Node *rm = popStack(stk);
-
-      current = stk->top;
-      if(rm->right && rm->right->visited) {
-         rm->right->visited = 0;
-         if(rm->left && rm->left->visited) rm->left->visited = 0;
-      }
-      free(rm);
+      popStack(stk, &current);
 
       if(stk->height == 0) {
          root->visited = 0;
@@ -239,14 +239,8 @@ int iterativeMaximumDepth(Stack *stk, Node *root) {
          continue;
       }
 
-      Node *rm = popStack(stk);
+      popStack(stk, &current);
 
-      current = stk->top;
-      if(rm->right && rm->right->visited) {
-         rm->right->visited = 0;
-         if(rm->left && rm->left->visited) rm->left->visited = 0;
-      }
-      free(rm);
       if(stk->height == 0) {
          root->visited = 0;
          break;
@@ -302,15 +296,10 @@ void iterativeCreateDictionary(char **dict, Node *root, Stack *stk, int cols) {
          continue;
       }
 
-      Node *rm = popStack(stk);
-      
-      current = stk->top;
+      popStack(stk, &current);
+
       path[stk->height - 1] = '\0';
-      if(rm->right && rm->right->visited) {
-         rm->right->visited = 0;
-         if(rm->left && rm->left->visited) rm->left->visited = 0;
-      }
-      free(rm);
+
       if(stk->height == 0) {
          root->visited = 0;
          break;
