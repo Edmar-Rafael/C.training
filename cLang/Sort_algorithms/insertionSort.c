@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "practice.h"
+
+typedef struct Node {
+  int data;
+  struct Node *previous;
+  struct Node *next;
+} Node;
 
 Node* insertionSort(Node *head) {
   if(head) {

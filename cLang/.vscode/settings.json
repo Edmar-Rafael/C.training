@@ -1,0 +1,7 @@
+{
+   "files.associations": {
+      "time.h": "c",
+      "limits": "c",
+      "unistd.h": "c"
+   }
+}

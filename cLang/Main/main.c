@@ -1,163 +1,92 @@
 #include "practice.c"
+#define E "\U0001f600"
 
 
 int main() {
    printStyles();
 
-   unsigned int table[LENGTH] = {0};
-   unsigned char *text = "Well! At least I think I should try it. And you will like it.";
-
-   frequenceTableFill(table, text);
-   frequenceTablePrint(table);
+   int choice;
+   char str[10];
+   char *opt = "0 - Exit"E"\n1 - Insert at begin\n2 - Remove at begin\n3 - Print\n4 - Sort\n";
+   char *opt2 = "5 - To invert\n6 - Clear list\n7 - Insert at end\n8 - Remove at end\n";
+   char *opt3 = "9 - Change Elements\n10 - Insert at specific pos\n11 - Remove specific element\n";
 
    List list;
-   
-   listInit(&list);
-   listFill(&list, table);
-   listPrint(list);
+   Node *remove;
 
-   Stack stk;
-   stackInit(&stk);
+   createList(&list);
 
-   Node *root = HuffmanTreeInsert(&list);
-   iterativeStackTreePrint(&stk, root);
+   while(1) {
+      printf("%s%s%s\n", opt, opt2, opt3);
+      scanf("%s", str);
 
-   int cols = iterativeMaximumDepth(&stk, root);
+      if(charToInt(str) || *str == '0') {
+         choice = charToInt(str);
+         getchar();
+         
+         switch(choice) {
+            case 1: {
+               push(&list, str);
+               continue;
+            }
+            case 2: {
+               remove = pop(&list);
+               remove ? printf("{%d} removed.\n\n", remove->data) : printf("Nothing to remove.\n\n");
+               continue;
+            }
+            case 3: {
+               printList(list);
+               continue;
+            }
+            case 4: {
+               SortList(&list);
+               continue;
+            }
+            case 5: {
+               listInverter(&list);
+               continue;
+            }
+            case 6: {
+               clearList(&list);
+               continue;
+            }
+            case 7: {
+               enqueue(&list, str);
+               continue;
+            }
+            case 8: {
+               remove = dequeue(&list);
+               remove ? printf("{%d} removed!\n\n", remove->data) : printf("Nothing to remove!\n\n");
+               continue;
+            }
+            case 9: {
+               changePlace(&list, 0, 0);
+               continue;
+            }
+            case 10: {
+               pushAtSpecificElement(&list, 0, str);
+               continue;
+            }
+            case 11: {
+               remove = popAtspecificPos(&list, 0);
+               remove ? printf("{%d} removed.\n\n", remove->data) : printf("Nothing to remove.\n\n");
+               continue;
+            }
+            default: {
+               if(choice != 0) {
+                  Error(str);
+                  continue;
+               }
 
-   char **dictionary = dictionaryInit(cols);
+               printf("Good bye!\n\n");
+               return 0;
+            }
+         }
+      }
 
-   iterativeCreateDictionary(dictionary, root, &stk, cols);
-   dictionaryPrint(dictionary);
-
-   char *code = encode(dictionary, text);
-   printf("\ncode: %s\n", code);
-
-   char *decoded = toDecode(code, root, text);
-   printf("\ndecode: %s\n", decoded);
+      catch();
+      continue;
+   }
 
    return 0;
 }
-/*
-y:1->u:1->r:1->o:1->n:1->k:1->d:1->a:1->W:1->A:1->.:1->!:1->s:2->i:2->h:2->e:2->I:2->l:4->t:5->'':8->
-                              +:2
-                             /   \
-                            y     u
-->r:1->o:1->n:1->k:1->d:1->a:1->W:1->A:1->.:1->!:1->+:2-> s:2->i:2->h:2->e:2->I:2->l:4->t:5->'':8->
-                              +:2
-                             /   \
-                            r     o
-->n:1->k:1->d:1->a:1->W:1->A:1->.:1->!:1->+:2 ->+:2-> s:2->i:2->h:2->e:2->I:2->l:4->t:5->'':8->
-                              +:2
-                             /   \
-                            n     k
-->d:1->a:1->W:1->A:1->.:1->!:1->+:2-> +:2 ->+:2-> s:2->i:2->h:2->e:2->I:2->l:4->t:5->'':8->
-                              +:2
-                             /   \
-                            d     a
-->W:1->A:1->.:1->!:1->+:2-> +:2 ->+:2 ->+:2-> s:2->i:2->h:2->e:2->I:2->l:4->t:5->'':8->
-                              +:2
-                             /   \
-                            W     A
-->.:1->!:1->+:2 ->+:2-> +:2 ->+:2 ->+:2-> s:2->i:2->h:2->e:2->I:2->l:4->t:5->'':8->
-                              +:2
-                             /   \
-                            .     !
-->+:2 ->+:2 ->+:2-> +:2 ->+:2 ->+:2-> s:2->i:2->h:2->e:2->I:2->l:4->t:5->'':8->
-                              +:4
-                          /         \
-                        +:2         +:2
-                       /   \       /   \
-                      .     !     W     A
-->+:2-> +:2 ->+:2 ->+:2-> s:2->i:2->h:2->e:2->I:2->+:4 ->l:4->t:5->'':8->
-                              +:4
-                           /        \
-                         +:2        +:2
-                        /   \      /   \
-                       d     a    n     k
-->+:2 ->+:2-> s:2->i:2->h:2->e:2->I:2->+:4 ->+:4 ->l:4->t:5->'':8->
-                              +:4
-                           /        \
-                          +:2       +:2
-                         /   \     /   \
-                        r     o   y     u
--> s:2->i:2->h:2->e:2->I:2->+:4 ->+:4 ->+:4 ->l:4->t:5->'':8->
-                              +:4
-                           /        \
-                          s          i
-->h:2->e:2->I:2->+:4 ->+:4 ->+:4 ->+:4 ->l:4->t:5->'':8->
-                              +:4
-                           /        \
-                          h          e
-->I:2->+:4 ->+:4 ->+:4 ->+:4 ->+:4 ->l:4->t:5->'':8->
-                              +:6
-                           /        \
-                          I         +:4
-                                 /        \
-                                h          e
-->+:4 ->+:4 ->+:4 ->+:4 ->l:4->t:5->+:6 ->'':8->
-                              +:8
-                  /                         \
-                +:4                         +:4
-             /        \               /             \
-            s          i            +:2             +:2
-                                   /   \           /    \
-                                  r     o         y      u
-->+:4 ->+:4 ->l:4->t:5->+:6 ->+:8 ->'':8->
-                              +:8
-                  /                         \
-                 +:4                        +:4
-            /           \              /            \
-          +:2           +:2          +:2            +:2
-         /   \         /   \        /   \          /   \
-        d     a       n     k      .     !        W     A
-->l:4->t:5->+:6 ->+:8 ->+:8 ->'':8->
-                                    +:9
-                                   /   \
-                                  l     t
--> +:6 ->+:8 ->+:8 ->'':8->+:9 ->
-                                    +:14
-                     /                                      \
-                  +:6                                       +:8
-            /              \                       /                   \
-           I               +:4                    +:4                  +:4
-                        /        \             /      \             /        \
-                       h          e          +:2      +:2         +:2        +:2
-                                            /   \    /   \       /    \     /    \
-                                           d     a  n     k     .      !   W      A
-->+:8 ->'':8->+:9 ->+:14 ->
-                                    +:16
-                           /                      \
-                         +:8                      ''
-               /                       \
-             +:4                       +:4
-         /        \                 /        \
-        s          i              +:2        +:2
-                                 /   \      /   \
-                                r     o    y     u
-->+:9 ->+:14 ->16 ->
-                               +:23
-               /                                  \
-             +:9                                  +:14
-          /       \             /                                   \
-         l         t          +:6                                   +:8
-                         /         \                  /                          \
-                        I          +:4               +:4                         +:4
-                                /        \       /          \                /          \
-                              h           e    +:2          +:2           +:2           +:2
-                                              /   \        /   \         /   \         /   \
-                                             d     a      n     k       .     !       W     A
-->+:16 ->+:23 ->
-                                    +:39
-                          /                         \
-                        +:16                        +:23
-           /                    \          /                    \
-         +:8                    ''       +:9                    +:14
-    /             \                     /   \         /                     \
-  +:4             +:4                  l     t      +:6                     +:8
- /   \         /        \                          /   \           /                 \
-s     i     +:2        +:2                        I    +:4       +:4                 +:4
-           /   \      /   \                           /   \     /     \           /        \
-          r     o    y     u                         h     e  +:2     +:2       +:2        +:2
-                                                             /   \   /   \     /   \      /   \
-                                                            d     a n     k   .     !    W     A
-                                 */

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../mergeSort.c"
+#include "../Sort_algorithms/mergeSort_linkedList.c"
 
 
 int countNodes(Node *head) {

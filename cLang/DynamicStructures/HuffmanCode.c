@@ -106,7 +106,7 @@ void listFill(List *list, unsigned int t[]) {
 void listPrint(List list) {
    Node *current = list.head;
 
-   printf("\nSorted List\n");
+   printf("\nSorted List\tLength: %d\n", list.length);
    while(current) {
       printf("Character: %c\tFrequence: %d\n", current->character, current->frequence);
       current = current->next;
@@ -167,7 +167,7 @@ void stackInit(Stack *stk) {
    stk->top = NULL;
 }
 
-Node* popStack(Stack *stk, Node **curr) {
+void popStack(Stack *stk, Node **curr) {
    Node *remove = stk->top;
    stk->top = remove->next;
    remove->next = NULL;
@@ -220,7 +220,7 @@ int iterativeMaximumDepth(Stack *stk, Node *root) {
    if(!root) return -1;
    
    Node *current = root;
-   int n = 0;
+   int maximumHeight = 0;
 
    while(1) {
       if(!current->visited) {
@@ -245,11 +245,11 @@ int iterativeMaximumDepth(Stack *stk, Node *root) {
          root->visited = 0;
          break;
       }
-      if(stk->height > n) n = stk->height;
+      if(stk->height > maximumHeight) maximumHeight = stk->height;
       stk->height = current->height;
    }
 
-   return n;
+   return maximumHeight;
 }
 
 char** dictionaryInit(int cols) {
@@ -263,19 +263,20 @@ char** dictionaryInit(int cols) {
 }
 
 void iterativeCreateDictionary(char **dict, Node *root, Stack *stk, int cols) {
-   Node *current = root;
-
+   Node *curr = root;
    char *path = (char *) calloc(cols, sizeof(char));
 
    while(1) {
-      if(!current->visited) {
-         Node *newNode = createStackNewNode(current, stk);
+      if(!curr->visited) {
+         Node *newNode = createStackNewNode(curr, stk);
       }
 
-      if(!current->left && !current->right) stringCopy(dict[current->character], path);
+      if(!curr->left && !curr->right) {
+         stringCopy(dict[curr->character], path);
+      }
 
-      if(current->left && !current->left->visited) {
-         current = current->left;
+      if(curr->left && !curr->left->visited) {
+         curr = curr->left;
          stk->height++;
          char left[cols];
          stringMemSet(left, 0, cols);
@@ -285,8 +286,8 @@ void iterativeCreateDictionary(char **dict, Node *root, Stack *stk, int cols) {
          continue;
       }
 
-      if(current->right && !current->right->visited) {
-         current = current->right;
+      if(curr->right && !curr->right->visited) {
+         curr = curr->right;
          stk->height++;
          char right[cols];
          stringMemSet(right, 0, cols);
@@ -296,7 +297,7 @@ void iterativeCreateDictionary(char **dict, Node *root, Stack *stk, int cols) {
          continue;
       }
 
-      popStack(stk, &current);
+      popStack(stk, &curr);
 
       path[stk->height - 1] = '\0';
 
@@ -304,7 +305,7 @@ void iterativeCreateDictionary(char **dict, Node *root, Stack *stk, int cols) {
          root->visited = 0;
          break;
       }
-      stk->height = current->height;
+      stk->height = curr->height;
    }
 }
 
@@ -326,8 +327,11 @@ void recursiveCreateDictionary(char **dict, Node *root, char *path, int cols) {
 void dictionaryPrint(char **dict) {
    printf("\n");
    for(i = 0; i < LENGTH; i++) {
-      if(stringLen(dict[i]) > 0) printf("%3d: %c = %s\n", i, i, dict[i]);
+      if(stringLen(dict[i]) > 0) {
+         printf("%3d: %c = %s\n", i, i, dict[i]);
+      }
    }
+   printf("\n");
 }
 
 int findCodeLength(char **dict, unsigned char *str) {
@@ -342,7 +346,6 @@ int findCodeLength(char **dict, unsigned char *str) {
 
 char* encode(char **dict, unsigned char *str) {
    int codeLenght = findCodeLength(dict, str);
-
    char *code = (char *) calloc(codeLenght, sizeof(char));
 
    for(i = 0; str[i] != '\0'; i++) {

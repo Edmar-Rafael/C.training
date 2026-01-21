@@ -131,3 +131,40 @@ char* fileReader(char *fileName) {
 
    return buffer;
 }
+
+char* intToChar(int n) {
+   int isNegative = 0;
+   int i;
+   char *res = (char *) calloc(14, sizeof(char));
+
+   if(n >= 0 && n <= 9) {
+      *res = (n % 10) + '0';
+      return res;
+   }
+
+   if(n < 0) {
+      isNegative = 1;
+      n = -n;
+   }
+
+   for(i = 0; n > 0; i++) {
+      res[i] = (n % 10) + '0';
+      n /= 10;
+   }
+
+   isNegative ? res[i++] = '-' : '\0';
+   res[i] = '\0';
+
+   int start = 0;
+   int end = i - 1;
+
+   while(start < end) {
+      char temp = res[start];
+      res[start] = res[end];
+      res[end] = temp;
+      start++;
+      end--;
+   }
+
+   return res;
+}
